@@ -5,12 +5,12 @@ Tablica [miro.com](https://miro.com/welcomeonboard/b25YWlhCN21YSmJFTFNNVno5dlppV
 
 Używane kolory w projekcie:  
 Tło: #191F35  
-Przyciski, logo, suwaki: #6B72FF  
+Przyciski, logo, suwaki: #6B72FF.  
 Tabelka:  
-  Ciemny kolor: #101936  
-  Jasny kolor: #212B4E  
-Tło dla powiadomień, hd itp: #101936  
+Ciemny kolor: #101936.  
+Jasny kolor: #212B4E.  
+Tło dla powiadomień, hd itp: #101936. 
 
 Fonty:  
-Logo: Jura  
-Reszta: Open sans  
+Logo: Jura.  
+Reszta: Open sans. 
