@@ -14,3 +14,22 @@ Tło dla powiadomień, hd itp: #101936.
 Fonty:  
 Logo: Jura.  
 Reszta: Open sans. 
+
+Rozmiar  i grubość fontów:  
+Tryb publiczny i prywatny:  
+	logo: 32 bold  
+	tabelka, ustawienia, menu po lewej, przycisk zaloguj się, adres email: 16 light  
+	Powitanie: 24 light  
+	Zmiana daty: 12 light  
+	Powiadomienia, HD: 24 light  
+	tekst pod powiadomieniami: 16 light  
+	  
+Logowanie:  
+	logo: 32 bold  
+	napis „Zaloguj się”:  44 Condensed Bold  
+	przycisk „Zaloguj się”: 20 Condensed Bold  
+	Reszta: 16 Regular
+  
+Kalendarz:  
+	nagłówki kalendarza: 12 bold  
+	reszta kalendarza: 10 bold  
