@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "dyIAqsb9F9Ldl/CBZhMhI5HDv5x1JjQ03F8AALesIgniKczZPLBRSCBRz2aEI3h3mtrrUADNCpJ0cj8sgq5iWg==",
+  "dgSpecHash": "Ub2rrDiQVeYHA7S2Tk5zz00+K8TLs08gu9ETx8BQXDJXzJocFfERqhfStVCJHQ7ggjJ5GdgMSQrfYj7fnQMVJg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\joszko\\Documents\\GitHub\\Obecni_clone\\backend\\webapi\\webapi.csproj",
+  "projectFilePath": "C:\\Users\\joszko\\Documents\\GitHub\\Obecni_clone\\webapi\\webapi.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\joszko\\.nuget\\packages\\microsoft.aspnetcore.openapi\\7.0.16\\microsoft.aspnetcore.openapi.7.0.16.nupkg.sha512",
     "C:\\Users\\joszko\\.nuget\\packages\\microsoft.extensions.apidescription.server\\6.0.5\\microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
