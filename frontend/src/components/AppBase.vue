@@ -1,11 +1,9 @@
 <template>
-  <div id="app">
     <div id="middle">
       <up-bar-logged></up-bar-logged>
       <NotificationsAndHDApp/>
     </div>
     <MenuApp/>
-  </div>
 </template>
 
 <script setup>
@@ -26,6 +24,7 @@ body {
   background-color: #191F35;
 
 }
+
 body::after {
   content: '';
   position: absolute;
@@ -42,4 +41,14 @@ body::after {
 #app {
   margin: 0px;
 }
+
 </style>
+<script>
+export default {
+  computed: {
+    isHomePage() {
+      return this.$route.path === '/base'; // Sprawdzanie, czy jesteśmy na stronie głównej
+    }
+  }
+}
+</script>

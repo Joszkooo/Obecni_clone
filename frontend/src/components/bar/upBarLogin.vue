@@ -5,7 +5,7 @@ export default {}
 <template>
  <div id="up-bar">
    <h1 id="welcome">Witaj Korzystasz z trybu publicznego</h1>
-   <button>Zaloguj się</button>
+   <router-link to="/LogIn"><button>Zaloguj się</button></router-link>
  </div>
 </template>
 

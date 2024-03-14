@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="menuuu">
     <a href="#" id="toggle-menu" @click="toggleMenu" class="button"><img id="ikona2" src="../../assets/ikony/calendar_color.png"> {{isMenuActive ? 'Kalendarz' : 'Kalendarz v' }}</a>
     <ul class="menu" :class="{ 'active': isMenuActive }">
       <li>Urlop</li>
@@ -32,20 +32,21 @@ export default {
   display: none;
   list-style-type: none;
   padding: 0;
-  margin: 0;
-
+}
+#menuuu {
+  height: 28em;
+  align-items: center;
 }
 #ikona2 {
   height: 1.3vw;
   width: 1.3vw;
 }
+
 .menu.active {
   display: block;
-
 }
 
 .menu li {
-  padding: 10px;
   cursor: pointer;
   font-size: 1.5vw;
   font-family: "Open sans";
@@ -75,5 +76,6 @@ export default {
     height: 6vw;
     width: 6vw;
   }
+
 }
 </style>

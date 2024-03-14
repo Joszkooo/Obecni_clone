@@ -14,12 +14,16 @@ export default {
 </script>
 
 <style scoped>
+h1 {
+  text-decoration: none;
+  text-underline: none;
+}
 #tittleApp {
   font-size: 1.5vw;
   text-align: center;
   font-family: Jura;
   color: white;
-
+  text-underline: none;
 }
 #tittleApp::first-letter {
   color: #6B72FF;

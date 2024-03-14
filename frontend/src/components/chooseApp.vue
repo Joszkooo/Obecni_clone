@@ -1,9 +1,8 @@
 <template>
   <div id="chooseApp">
-    <mainApp>
-    </mainApp>
-    <calendarApp>
-    </calendarApp>
+      <mainApp></mainApp>
+      <calendarApp></calendarApp>
+      <SettingsApp></SettingsApp>
   </div>
 </template>
 
@@ -11,6 +10,7 @@
 #chooseApp {
   margin-top: 30%;
   color: white;
+  align-items: center;
 }
 @media screen and (max-width: 768px) {
   #chooseApp {
@@ -23,10 +23,11 @@
 <script setup>
 import mainApp from "./menu-content/mainApp.vue";
 import calendarApp from "./menu-content/calendarApp.vue";
+import SettingsApp from "@/components/menu-content/settingsApp.vue";
+
 </script>
 <script>
 export default {
 
 }
-
 </script>

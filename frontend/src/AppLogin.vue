@@ -1,20 +1,29 @@
 <template>
   <div id="app">
-    <MenuApp/>
-    <up-bar></up-bar>
+    <RouterView v-if="!isHomePage"></RouterView>
+    <MenuLoginApp  v-if="!isLoginPage && !isHomePage"/>
+    <up-bar-login  v-if="!isLoginPage&& !isHomePage"></up-bar-login>
+    <div id="middle">
+      <up-bar-logged v-if="isHomePage"/>
+      <NotificationsAndHDApp v-if="isHomePage"/>
+    </div>
+    <MenuApp v-if="isHomePage"/>
   </div>
 </template>
 
 <script setup>
-import MenuApp from '@/components/MenuLoginApp.vue';
-import upBar from "@/components/bar/upBarLogin.vue";
-
+import MenuLoginApp from '@/components/MenuLoginApp.vue';
+import upBarLogin from "@/components/bar/upBarLogin.vue";
+import MenuApp from '@/components/MenuApp.vue'
+import UpBarLogged from "@/components/bar/upBarLogged.vue";
+import NotificationsAndHDApp from "@/components/notificationsAndHDApp.vue";
 </script>
 
 <style>
-body {
-  margin: 0px;
-  background-color: #191F35;
+#middle {
+  width: 80%;
+  height: 100%;
+  float: right;
 }
 body::after {
   content: '';
@@ -24,6 +33,17 @@ body::after {
   left: 20%;
   border-left: 0.5px solid rgba(255, 255, 255, 0.3);
 }
+
+
+body.login-page::after {
+  border-left: none;
+}
+
+body {
+  margin: 0px;
+  background-color: #191F35;
+}
+
 @media screen and (max-width: 768px) {
   body::after {
     border-left: none;
@@ -33,3 +53,31 @@ body::after {
   margin: 0px;
 }
 </style>
+
+<script>
+export default {
+  computed: {
+    isLoginPage() {
+      return this.$route.path === '/LogIn';
+    },
+    isHomePage() {
+      return this.$route.path === '/base';
+    }
+  },
+  watch: {
+    $route(to) {
+      if (to.path === '/LogIn') {
+        document.body.classList.add('login-page');
+      } else {
+        document.body.classList.remove('login-page');
+      }
+    }
+  },
+  created() {
+
+    if (this.$route.path === '/LogIn') {
+      document.body.classList.add('login-page');
+    }
+  }
+}
+</script>
