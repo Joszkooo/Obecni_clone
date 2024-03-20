@@ -1,27 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\joszko\\Documents\\GitHub\\Obecni_clone\\webapi\\webapi.csproj": {}
+    "C:\\Users\\mariu\\Desktop\\piatek\\Obecni_clone\\backend\\webapi.csproj": {}
   },
   "projects": {
-    "C:\\Users\\joszko\\Documents\\GitHub\\Obecni_clone\\webapi\\webapi.csproj": {
+    "C:\\Users\\mariu\\Desktop\\piatek\\Obecni_clone\\backend\\webapi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\joszko\\Documents\\GitHub\\Obecni_clone\\webapi\\webapi.csproj",
+        "projectUniqueName": "C:\\Users\\mariu\\Desktop\\piatek\\Obecni_clone\\backend\\webapi.csproj",
         "projectName": "webapi",
-        "projectPath": "C:\\Users\\joszko\\Documents\\GitHub\\Obecni_clone\\webapi\\webapi.csproj",
-        "packagesPath": "C:\\Users\\joszko\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\joszko\\Documents\\GitHub\\Obecni_clone\\webapi\\obj\\",
+        "projectPath": "C:\\Users\\mariu\\Desktop\\piatek\\Obecni_clone\\backend\\webapi.csproj",
+        "packagesPath": "C:\\Users\\mariu\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\mariu\\Desktop\\piatek\\Obecni_clone\\backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\joszko\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\mariu\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -43,6 +41,20 @@
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[7.0.16, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[7.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[7.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.SQLServer": {
+              "target": "Package",
+              "version": "[7.0.0, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
@@ -68,7 +80,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.406\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     }
