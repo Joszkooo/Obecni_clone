@@ -1,6 +1,10 @@
 <template>
   <nav-bar></nav-bar>
   <div id="loginpage">
+    <div v-if="loggedIn" class="user-info">
+
+    </div>
+    <div v-else>
     <h1 id="login">Zaloguj się</h1>
     <form>
       <div>
@@ -18,23 +22,43 @@
 
   <!--    <input type="checkbox" value="lsRememberMe" id="rememberMe"> <label class="" for="rememberMe">asdds</label>-->
       <router-link to="/base"><button id="buttonCos">Zaloguj się</button></router-link>
+      <GoogleLogin :callback="callback"  class="google-login"/>
     </form>
+    </div>
   </div>
 </template>
 <script>
 
 import NavBar from "@/components/bar/navBar.vue";
+import {decodeCredential, GoogleLogin, googleLogout} from "vue3-google-login";
+import {setUser} from "@/userService.js";
 
 export default {
-  components: {NavBar},
+  components: {GoogleLogin, NavBar},
   data() {
     return {
       email: '',
       password: '',
-    }
-  }
+      loggedIn: false,
+      user: null,
+    };
+  },
+  methods: {
+    callback(response) {
+      console.log("Zalogowano");
+      this.loggedIn = true;
+      console.log(response);
+      this.user = decodeCredential(response.credential);
+      setUser(this.user);
+      this.$router.push('/base');
+    },
+    logout() {
+      googleLogout();
+      this.loggedIn = false;
+    },
+  },
 
-}
+};
 </script>
 
 <style>
@@ -59,6 +83,9 @@ export default {
     font-family: "Open sans";
     color: white;
   }
+
+
+
 
   form {
     max-width: 420px;
@@ -132,4 +159,15 @@ export default {
     margin: 25px 0 15px;
 
   }
+
+  .google-login {
+    width: 100%;
+    background-color: #ffffff;
+    border-style: solid;
+    border-radius: 10px;
+    padding: 6px 6px;
+    font-weight: 600;
+    box-sizing: border-box;
+  }
+
 </style>

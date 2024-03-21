@@ -1,17 +1,22 @@
 <script>
+import { getUser } from '@/userService';
 export default {
   data () {
     return {
+      user: null,
       name: "Miłosz"
-    }
+    };
+  },
+  created() {
+    this.user = getUser();
   }
 }
 </script>
 
 <template>
   <div id="up-bar">
-    <h1 id="welcome">Witaj, {{name}}!</h1>
-    <h1 id="email">{{name}}@gmail.com</h1>
+    <h1 id="welcome">Witaj, {{user.name}}!</h1>
+    <h1 id="email">{{user.email}}</h1>
   </div>
 </template>
 
