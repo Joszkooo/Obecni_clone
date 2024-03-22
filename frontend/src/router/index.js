@@ -1,25 +1,33 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
 // Import komponentów, które będą używane w trasach
-import base from '@/components/AppBase.vue';
-import mainApp from "@/components/menu-content/mainApp.vue";
-import tabela from "@/components/menu-content/main-content/tabelaMain.vue";
-import LogIn from "@/components/LogIn.vue";
+import tabela from "@/components/menu-content/choose/main-content/tabelaPrivate.vue";
+import LogIn from "@/views/LoginView.vue";
+import PrivateView from "@/views/PrivateView.vue";
+import PublicView from "@/views/PublicView.vue";
+import urlop from "@/components/menu-content/choose/calendar-content/urlopApp.vue"
 const routes = [
+    {
+        path: '/',
+        name: 'Public',
+        component: PublicView,
+    },
     {
         path: '/base',
         name: 'base',
-        component: base
-    },
-    {
-        path: '/tabela',
-        name: 'tabela',
-        component: tabela
-    },
-    {
-        path: '/mainApp',
-        name: 'MainApp',
-        component: mainApp
+        component: PrivateView,
+        children: [
+            {
+                path: 'tabela',
+                name: 'tabela',
+                component: tabela
+            },
+            {
+                path: 'urlop',
+                name: 'urlop',
+                component: urlop
+            },
+        ]
     },
     {
         path: '/LogIn',
