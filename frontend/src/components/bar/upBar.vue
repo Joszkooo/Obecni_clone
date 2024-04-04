@@ -6,15 +6,12 @@
 </template>
 
 <script setup>
-//import { useRoute } from 'vue-router';
-//const route = useRoute();
+
 import { getUser } from '@/userService';
 import UpBarLogged from "@/components/bar/upBarLogged.vue";
 import upBarLogin from "@/components/bar/upBarLogin.vue"
 const user = getUser();
-//const isBasePage = route.path === '/base';
 
-//import isLoginPage = route.path === '/';
 </script>
 
 <style scoped>

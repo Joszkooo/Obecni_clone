@@ -1,3 +1,82 @@
+<script>
+import { icons } from "@/assets/ikony/icons.js";
+
+export default {
+  data() {
+    return {
+      items: [
+        {
+          id: "Julka - Julia Grzywińska",
+          status: 'Produkt 1',
+          CzasPracy: 10,
+          Wejscie: '8:50',
+          Wyjscie: '13:30',
+          Urlop: 10,
+          tygodniowka: "01d01h59min",
+          currentIconIndex: 0
+        },
+        {
+          id: "Julka - Julia Grzywińska",
+          status: 'Produkt 1',
+          CzasPracy: 10,
+          Wejscie: '8:50',
+          Wyjscie: '13:30',
+          Urlop: 10,
+          tygodniowka: "01d01h59min",
+          currentIconIndex: 1
+        }
+        ,
+        {
+          id: "Julka - Julia Grzywińska",
+          status: 'Produkt 1',
+          CzasPracy: 10,
+          Wejscie: '8:50',
+          Wyjscie: '13:30',
+          Urlop: 10,
+          tygodniowka: "01d01h59min",
+          currentIconIndex: 2
+        }
+        ,
+        {
+          id: "Julka - Julia Grzywińska",
+          status: 'Produkt 1',
+          CzasPracy: 10,
+          Wejscie: '8:50',
+          Wyjscie: '13:30',
+          Urlop: 10,
+          tygodniowka: "01d01h59min",
+          currentIconIndex:3
+        }
+        ,
+        {
+          id: "Julka - Julia Grzywińska",
+          status: 'Produkt 1',
+          CzasPracy: 10,
+          Wejscie: '8:50',
+          Wyjscie: '13:30',
+          Urlop: 10,
+          tygodniowka: "01d01h59min",
+          currentIconIndex:4
+        }
+      ],
+      iconKeys: Object.keys(icons), // Pobierz klucze ikon
+      currentIconIndex: 0
+    };
+  },
+  computed: {
+    currentIcon() {
+      const currentIconKey = this.iconKeys[this.currentIconIndex];
+      return icons[currentIconKey];
+    }
+  },
+  methods: {
+    zmienIkone() {
+      // Przejście do następnej ikony
+      this.currentIconIndex = (this.currentIconIndex + 1) % this.iconKeys.length;
+    }
+  }
+};
+</script>
 <template>
   <div id="tabela-container">
     <table class="tabelanoscroll">
@@ -18,7 +97,7 @@
         <tbody>
         <tr v-for="(item, index) in items" :key="item.id" :class="{ 'odd-row': index % 2 === 0, 'even-row': index % 2 === 1 }">
           <td>{{ item.id }}</td>
-          <td>{{ item.status }}</td>
+          <td><img :src="currentIcon" style="width: 2vw; height: 2vw" @click="zmienIkone"></td>
           <td>{{ item.CzasPracy }}</td>
           <td>{{ item.Wejscie }}</td>
           <td>{{ item.Wyjscie }}</td>
@@ -30,107 +109,6 @@
     </div>
   </div>
 </template>
-
-<script>
-
-  export default {
-    data: function () {
-      return {
-        items: [
-          {
-            id: "Julka - Julia Grzywińska",
-            status: 'Produkt 1',
-            CzasPracy: 10,
-            Wejscie: '8:50',
-            Wyjscie: '13:30',
-            Urlop: 10,
-            tygodniowka: "01d01h59min"
-          },
-          {
-            id: "Julka - Julia Grzywińska",
-            status: 'Produkt 1',
-            CzasPracy: 10,
-            Wejscie: '8:50',
-            Wyjscie: '13:30',
-            Urlop: 10,
-            tygodniowka: "01d01h59min"
-          },
-          {
-            id: "Julka - Julia Grzywińska",
-            status: 'Produkt 1',
-            CzasPracy: 10,
-            Wejscie: '8:50',
-            Wyjscie: '13:30',
-            Urlop: 10,
-            tygodniowka: "01d01h59min"
-          },
-          {
-            id: "Julka - Julia Grzywińska",
-            status: 'Produkt 1',
-            CzasPracy: 10,
-            Wejscie: '8:50',
-            Wyjscie: '13:30',
-            Urlop: 10,
-            tygodniowka: "01d01h59min"
-          },
-          {
-            id: "Julka - Julia Grzywińska",
-            status: 'Produkt 1',
-            CzasPracy: 10,
-            Wejscie: '8:50',
-            Wyjscie: '13:30',
-            Urlop: 10,
-            tygodniowka: "01d01h59min"
-          },
-          {
-            id: "Julka - Julia Grzywińska",
-            status: 'Produkt 1',
-            CzasPracy: 10,
-            Wejscie: '8:50',
-            Wyjscie: '13:30',
-            Urlop: 10,
-            tygodniowka: "01d01h59min"
-          },
-          {
-            id: "Julka - Julia Grzywińska",
-            status: 'Produkt 1',
-            CzasPracy: 10,
-            Wejscie: '8:50',
-            Wyjscie: '13:30',
-            Urlop: 10,
-            tygodniowka: "01d01h59min"
-          },
-          {
-            id: "Julka - Julia Grzywińska",
-            status: 'Produkt 1',
-            CzasPracy: 10,
-            Wejscie: '8:50',
-            Wyjscie: '13:30',
-            Urlop: 10,
-            tygodniowka: "01d01h59min"
-          },
-          {
-            id: "Julia Grzywińska",
-            status: 'Produkt 1',
-            CzasPracy: 10,
-            Wejscie: '8:50',
-            Wyjscie: '13:30',
-            Urlop: 10,
-            tygodniowka: "01d01h59min"
-          },        {
-            id: "Julka - Julia Grzywińska",
-            status: 'Produkt 1',
-            CzasPracy: 10,
-            Wejscie: '8:50',
-            Wyjscie: '13:30',
-            Urlop: 10,
-            tygodniowka: "01d01h59min"
-          },
-        ]
-      };
-    }
-  };
-</script>
 
 
 <style scoped>
@@ -171,6 +149,7 @@ th {
 thead {
   background-color: #101936;
   text-align: center;
+
 }
 
 tbody {

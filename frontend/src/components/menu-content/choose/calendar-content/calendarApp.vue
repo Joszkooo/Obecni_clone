@@ -2,7 +2,7 @@
   <div id="menuuu">
     <a href="#" id="toggle-menu" @click="toggleMenu" class="button"><img id="ikona2" src="../../../../assets/ikony/calendar_color.png"> {{isMenuActive ? 'Kalendarz' : 'Kalendarz v' }}</a>
     <ul class="menu" :class="{ 'active': isMenuActive }">
-      <li><router-link class="router-link" :to="{ name: 'urlop' }">Urlop</router-link></li>
+      <li><router-link class="urlop" :to="{ name: 'urlop' }">Urlop</router-link></li>
       <li>Wyjazd do klienta</li>
       <li>HD</li>
       <li>Fajrant</li>
@@ -29,6 +29,11 @@ export default {
 </script>
 
 <style scoped>
+.urlop {
+  text-decoration: none;
+  text-underline: none;
+  color: white;
+}
 .menu {
   display: none;
   list-style-type: none;

@@ -5,10 +5,6 @@
 </template>
 
 <script setup>
-
-
-//import PublicView from "@/views/PublicView.vue";
-
 </script>
 
 <style>
@@ -47,6 +43,7 @@ body {
 </style>
 
 <script>
+
 export default {
   computed: {
     isLoginPage() {
