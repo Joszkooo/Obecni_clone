@@ -11,12 +11,13 @@
 
 <style scoped>
 #noti {
-  height: 200px;
+  height: 13vw;
   width: 70%;
   background-color: #101936;
   border-radius: 15px;
   margin-left: 2.5%;
   margin-top: 1%;
+
 }
 h1 {
   font-family: "Open sans";
@@ -24,6 +25,7 @@ h1 {
   color: white;
   font-weight: lighter;
   font-size: 2vw;
+
 }
 p {
   font-family: "Open sans";

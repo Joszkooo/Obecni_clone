@@ -19,6 +19,7 @@ body::after {
   top: 0;
   bottom: 0;
   left: 20%;
+  height: 100%;
   border-left: 0.5px solid rgba(255, 255, 255, 0.3);
 }
 

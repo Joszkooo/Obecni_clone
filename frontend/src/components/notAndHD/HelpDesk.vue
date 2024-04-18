@@ -10,7 +10,7 @@ export default {
 
 <style scoped>
   #hd {
-    height: 200px;
+    height: 13vw;
     width: 30%;
     background-color: #101936;
     border-radius: 15px;

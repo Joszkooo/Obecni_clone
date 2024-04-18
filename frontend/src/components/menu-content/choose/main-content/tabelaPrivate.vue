@@ -1,7 +1,8 @@
 <script>
 import { icons } from "@/assets/ikony/icons.js";
-
+import tableCompoments from "./table.js"
 export default {
+  mixins: [tableCompoments],
   data() {
     return {
       items: [
@@ -98,7 +99,7 @@ export default {
         <tr v-for="(item, index) in items" :key="item.id" :class="{ 'odd-row': index % 2 === 0, 'even-row': index % 2 === 1 }">
           <td>{{ item.id }}</td>
           <td><img :src="currentIcon" style="width: 2vw; height: 2vw" @click="zmienIkone"></td>
-          <td>{{ item.CzasPracy }}</td>
+          <td>{{  }}</td>
           <td>{{ item.Wejscie }}</td>
           <td>{{ item.Wyjscie }}</td>
           <td>{{ item.Urlop }}</td>
@@ -126,8 +127,11 @@ export default {
   margin-top: 50px;
   margin-right: 2.5%;
   margin-left: 2.5%;
+  display: flow-root;
 }
+.table-wrapper {
 
+}
 table {
   width: 100%;
   border-collapse: collapse;

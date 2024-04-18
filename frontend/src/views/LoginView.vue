@@ -9,14 +9,14 @@
     <form>
       <div>
   <!--      &lt;!&ndash;    <label>E-mail<span>*</span>:</label>&ndash;&gt;-->
-        <input class="email-input" type="email" required v-model="email" placeholder="E-mail">
+        <input class="email-input" type="email" required v-model="email" placeholder="E-mail" style="background-position-x:20px ">
       </div>
       <div>
           <!--    <label>Haslo:</label>-->
-        <input class="password-input" type="password" required v-model="email" placeholder="Haslo">
+        <input class="password-input" type="password" required v-model="email" placeholder="Haslo" style="background-position-x:20px ">
       </div>
-      <div>
-        <input type="checkbox">
+      <div style="display: flex; justify-content: center">
+        <input type="checkbox" >
         <label>Zapamiętaj haslo</label>
       </div>
 
@@ -122,12 +122,11 @@ export default {
   }
 
   .email-input {
-    background-position-x: 10px;
     background-image: url('@/assets/ikony/arroba.png');
     background-size: 20px; /* Dostosuj rozmiar obrazka */
     background-position: left center;
     background-repeat: no-repeat;
-    padding-left: 30px; /* Dodaj odstęp od lewej strony dla tekstu */
+    padding-left: 44px;
 
   }
   .password-input {
@@ -135,39 +134,31 @@ export default {
     background-size: 20px; /* Dostosuj rozmiar obrazka */
     background-position: left center;
     background-repeat: no-repeat;
-    padding-left: 30px; /* Dodaj odstęp od lewej strony dla tekstu */
+    padding-left: 44px; /* Dodaj odstęp od lewej strony dla tekstu */
 
   }
   #buttonCos {
-    margin: 30px auto;
     background-color: #a78bfa;
     text-align: center;
     border-style: solid;
-    margin: 25px 0 15px;
     border-radius: 10px;
     padding: 15px 6px;
-    width: 100%;
+    width: 45%;
     font-weight: 600;
     transition-duration: 200ms;
-    flex: 1 1 0%;
   }
-  #buttonCos.b {
-    margin: 30px auto;
-    background-color: #a78bfa;
-    text-align: center;
-    border-style: solid;
-    margin: 25px 0 15px;
 
-  }
 
   .google-login {
-    width: 100%;
+    float: right;
     background-color: #ffffff;
     border-style: solid;
     border-radius: 10px;
-    padding: 6px 6px;
+    padding: 3px;
     font-weight: 600;
     box-sizing: border-box;
+    display: flex;
+    justify-content: center;
   }
 
 </style>

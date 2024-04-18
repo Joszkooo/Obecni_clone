@@ -10,11 +10,11 @@
       </tr>
       </thead>
       <tbody>
-      <tr v-for="(item, index) in items" :key="item.id" :class="{ 'odd-row': index % 2 === 0, 'even-row': index % 2 === 1 }">
+      <tr v-for="item in items" :key="item.id" :class="{ 'odd-row': index % 2 === 0, 'even-row': index % 2 === 1 }">
         <td>{{ item.id }}</td>
-        <td>{{ item.CzasPracy }}</td>
-        <td>{{ item.Wejscie }}</td>
-        <td>{{ item.Wyjscie }}</td>
+        <td>{{ item.Imie }}</td>
+        <td>{{ item.Nazwisko }}</td>
+        <td>{{ item.Pseudonim }}</td>
       </tr>
       </tbody>
     </table>
@@ -22,44 +22,7 @@
 </template>
 
 <script>
-export default {
-  data: function () {
-    return {
-      items: [
-        {
-          id: "Julka",
-          CzasPracy: 10,
-          Wejscie: '8:50',
-          Wyjscie: '13:30',
-        },
-        {
-          id: "Julka",
-          CzasPracy: 10,
-          Wejscie: '8:50',
-          Wyjscie: '13:30',
-        },
-        {
-          id: "Julka",
-          CzasPracy: 10,
-          Wejscie: '8:50',
-          Wyjscie: '13:30',
-        },
-        {
-          id: "Julka",
-          CzasPracy: 10,
-          Wejscie: '8:50',
-          Wyjscie: '13:30',
-        },
-        {
-          id: "Julka",
-          CzasPracy: 10,
-          Wejscie: '8:50',
-          Wyjscie: '13:30',
-        },
-      ]
-    };
-  }
-};
+//import tableComponents from 'table.js'
 </script>
 
 <style scoped>

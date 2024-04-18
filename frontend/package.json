@@ -8,10 +8,16 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
-    "predev": "node aspnetcore-https.js"
+    "predev": "node aspnetcore-https.cjs"
   },
   "dependencies": {
-    "vue": "^3.4.15"
+    "@mobiscroll/vue": "npm:@mobiscroll/vue-trial@^5.29.1",
+    "axios": "^1.6.8",
+    "rrule": "^2.8.1",
+    "vue": "^3.4.15",
+    "vue-color": "^2.8.1",
+    "vue-router": "^4.3.0",
+    "vue3-google-login": "^2.0.26"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.3",
