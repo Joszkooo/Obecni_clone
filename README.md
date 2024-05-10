@@ -18,7 +18,7 @@ Tablica projektowa [miro.com](https://miro.com/welcomeonboard/b25YWlhCN21YSmJFTF
 - Reszta: Open sans. 
 
 **Rozmiar  i grubość fontów:**  
-Tryb publiczny i prywatny:  
+- Tryb publiczny i prywatny:
 	- Logo: 32 bold  
 	- Tabelka, ustawienia, menu po lewej, przycisk zaloguj się, adres email: 16 light  
 	- Powitanie: 24 light  
@@ -26,12 +26,12 @@ Tryb publiczny i prywatny:
 	- Powiadomienia, HD: 24 light  
 	- Tekst pod powiadomieniami: 16 light  
 	  
-Logowanie:  
+- Logowanie:  
 	- Logo: 32 bold  
 	- Napis „Zaloguj się”:  44 Condensed Bold  
 	- Przycisk „Zaloguj się”: 20 Condensed Bold  
 	- Reszta: 16 Regular
   
-Kalendarz:  
+- Kalendarz:  
 	- Nagłówki kalendarza: 12 bold  
 	- Reszta kalendarza: 10 bold  
