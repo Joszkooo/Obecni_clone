@@ -4,7 +4,7 @@
 Tablica projektowa [miro.com](https://miro.com/welcomeonboard/b25YWlhCN21YSmJFTFNNVno5dlppVkxWQjVaWmFyV1FndDFjYmQxbWtabUhDZGtzNVZuU3BpSzFoNm9EaXprYnwzNDU4NzY0NTM5MDc5NzgyMDE4fDI=?share_link_id=916940200239 'miro')
 
 ## Dane do unifikacji wyglądu:
-** Używane kolory w projekcie: **  
+**Używane kolory w projekcie:**  
 - Tło: #191F35  
 - Przyciski, logo, suwaki: #6B72FF.  
 - Tabelka:  
@@ -12,11 +12,11 @@ Tablica projektowa [miro.com](https://miro.com/welcomeonboard/b25YWlhCN21YSmJFTF
 - Jasny kolor: #212B4E.  
 - Tło dla powiadomień, hd itp: #101936. 
 
-** Fonty: **  
+**Fonty:**  
 - Logo: Jura.  
 - Reszta: Open sans. 
 
-** Rozmiar  i grubość fontów:**  
+**Rozmiar  i grubość fontów:**  
 Tryb publiczny i prywatny:  
 	- Logo: 32 bold  
 	- Tabelka, ustawienia, menu po lewej, przycisk zaloguj się, adres email: 16 light  
