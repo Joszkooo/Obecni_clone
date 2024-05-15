@@ -99,7 +99,7 @@ namespace backend.Controllers
         [Route("ShowWolne")]
         public JsonResult ShowWolne()
         {
-            string query = "SELECT id, CONVERT(VARCHAR(10), kiedy, 120) AS kiedy, nazwa FROM dniWolne WHERE kiedy BETWEEN GETDATE() AND DATEADD(DAY, 5, GETDATE());";
+            string query = "SELECT id, CONVERT(VARCHAR(10), kiedy, 120) AS kiedy, nazwa FROM dniWolne WHERE CAST(kiedy AS DATE) = CAST(GETDATE() AS DATE) OR kiedy BETWEEN GETDATE() AND DATEADD(DAY, 5, GETDATE());";
             DataTable table = new DataTable();
             string sqlDatasource = _configuration.GetConnectionString("DefaultConnection");
             SqlDataReader myreader;
@@ -122,7 +122,7 @@ namespace backend.Controllers
         [Route("GetUrlop")]
         public JsonResult GetUrlop(int UserId)
         {
-            string query = "SELECT * FROM Urlopy WHERE idpracownika = @UserId AND GETDATE() BETWEEN od_kiedy AND do_kiedy;";
+            string query = "SELECT * FROM Urlopy WHERE idpracownika = @UserId AND CAST(GETDATE() AS DATE) BETWEEN CAST(od_kiedy AS DATE) AND CAST(do_kiedy AS DATE);";
             DataTable table = new DataTable();
             string sqlDatasource = _configuration.GetConnectionString("DefaultConnection");
             SqlDataReader myreader;
@@ -150,7 +150,7 @@ namespace backend.Controllers
         [Route("GetUrlopNotification")]
         public JsonResult GetUrlopNotification(int UserId)
         {
-            string query = "SELECT od_kiedy, do_kiedy FROM Urlopy WHERE idpracownika = @UserId AND od_kiedy BETWEEN GETDATE() AND DATEADD(day, 5, GETDATE());";
+            string query = " SELECT od_kiedy, do_kiedy FROM Urlopy WHERE idpracownika = 3 AND od_kiedy BETWEEN GETDATE() AND DATEADD(day, 5, GETDATE());";
             DataTable table = new DataTable();
             string sqlDatasource = _configuration.GetConnectionString("DefaultConnection");
             SqlDataReader myreader;
@@ -169,7 +169,7 @@ namespace backend.Controllers
             if (table.Rows.Count == 0)
             {
                 // Sprawdź czy użytkownik jest aktualnie na urlopie
-                string queryCurrent = "SELECT od_kiedy, do_kiedy FROM Urlopy WHERE idpracownika = @UserId AND GETDATE() BETWEEN od_kiedy AND do_kiedy;";
+                string queryCurrent = "SELECT od_kiedy, do_kiedy FROM Urlopy WHERE idpracownika = @UserId AND CAST(GETDATE() AS DATE) BETWEEN CAST(od_kiedy AS DATE) AND CAST(do_kiedy AS DATE);";
                 DataTable tableCurrent = new DataTable();
 
                 using (SqlConnection myCon = new SqlConnection(sqlDatasource))
