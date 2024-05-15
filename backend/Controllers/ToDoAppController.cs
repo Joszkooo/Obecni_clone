@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -150,7 +151,7 @@ namespace backend.Controllers
         [Route("ShowStatus")]
         public JsonResult ShowStatus(int id)
         {
-            string selectQuery = "SELECT TOP 1 Id, PracownicyId, FORMAT(Wejscie, 'HH:mm:ss') AS Wejscie, FORMAT(Wyjscie, 'HH:mm:ss') AS Wyjscie, Status FROM Rejestr WHERE PracownicyId = @id ORDER BY Id DESC;";
+            string selectQuery = "SELECT TOP 1 Id, PracownicyId, FORMAT(Wejscie, 'HH:mm:ss') AS Wejscie, FORMAT(Wyjscie, 'HH:mm:ss') AS Wyjscie, Status, Status2 FROM Rejestr WHERE PracownicyId = @id ORDER BY Id DESC;";
             DataTable table = new DataTable();
             string sqlDatasource = _configuration.GetConnectionString("DefaultConnection");
             SqlDataReader myreader;
@@ -272,97 +273,392 @@ namespace backend.Controllers
         [Route("ChangeStatus2")]
         public JsonResult ChangeStatus2(int id)
         {
-            string selectQuery = "SELECT TOP 1 Id, Status FROM Rejestr WHERE PracownicyId = @id ORDER BY Id DESC;";
-            string selectIdQuery = "SELECT TOP 1 Id FROM Rejestr WHERE PracownicyId = @id ORDER BY Id DESC;";
-            string updateQuery = "UPDATE Rejestr SET Wyjscie = CONVERT(VARCHAR(19), DATEADD(HOUR, 2, GETDATE()), 120), Status = 'wyjście' WHERE Id = @id;";
-            string newStatusQuery = "DECLARE @currentDateTime AS VARCHAR(19); SET @currentDateTime = CONVERT(VARCHAR(19), DATEADD(HOUR, 2, GETDATE()), 120); INSERT INTO Rejestr (PracownicyId, Wejscie, Wyjscie, Status) VALUES (@id, @currentDateTime, NULL, 'w biurze');";
-
-
+            
             string sqlDatasource = _configuration.GetConnectionString("DefaultConnection");
 
             using (SqlConnection myCon = new SqlConnection(sqlDatasource))
             {
                 myCon.Open();
 
-                SqlCommand selectCommand = new SqlCommand(selectQuery, myCon);
-                selectCommand.Parameters.AddWithValue("@id", id);
+                try
+                    {
+                        //wez id ostatniego rejestru
+                        string getLastRejestrId = "SELECT TOP 1 Id, Status2 FROM Rejestr WHERE PracownicyId = @id ORDER BY Id DESC;";
+                        SqlCommand lastRejestrId = new SqlCommand(getLastRejestrId, myCon);
+                        lastRejestrId.Parameters.AddWithValue("@id", id);
+                        SqlDataReader lastRejestr = lastRejestrId.ExecuteReader();
+                        int rejestrId=0;
+                        string status2 = null;
+                        if (lastRejestr.Read()){
+                            rejestrId = lastRejestr.GetInt32(0);
+                            status2 = lastRejestr.GetString(1);
+                        }
+                        lastRejestr.Close();
 
-                SqlDataReader reader = selectCommand.ExecuteReader();
+                        if(rejestrId == 0){
+                            string newStatus = "DECLARE @currentDateTime AS VARCHAR(19); SET @currentDateTime = CONVERT(VARCHAR(19), DATEADD(HOUR, 2, GETDATE()), 120); INSERT INTO Rejestr (PracownicyId, Wejscie, Wyjscie, Status) VALUES (@id, @currentDateTime, NULL, 'wejscie', 'w biurze');";
+                            SqlCommand command = new SqlCommand(newStatus, myCon);
+                            command.Parameters.AddWithValue("@rejestrId", rejestrId);
+                            command.ExecuteNonQuery();
+                            return new JsonResult("User nie mial zadnego statusu, ustawiono nowy status na prace w biurze");
+                        }
 
-                if (reader.Read())
-                {
-                    if (!reader.IsDBNull(0))
-                    {   
-                        //zapisujemy obecny status i jego id
-                        string currentStatus = reader.GetString(reader.GetOrdinal("Status"));
-                        int rejestrId = reader.GetInt32(reader.GetOrdinal("Id"));
-                        string newStatus;
-                        reader.Close();
-
-                        switch (currentStatus)
+                        switch (status2)
                         {
                             case "w biurze":
-                                newStatus = "zdalnie";
-                                string updateQuery1 = "UPDATE Rejestr SET [Status]='zdalnie' WHERE Id = @rejestrID;";
+
+                                string updateQuery1 = "UPDATE Rejestr SET [Status2]='zdalnie' WHERE Id = @rejestrID;";
                                 SqlCommand updateCommand1 = new SqlCommand(updateQuery1, myCon);
                                 updateCommand1.Parameters.AddWithValue("@rejestrId", rejestrId);
                                 updateCommand1.ExecuteNonQuery();
                                 return new JsonResult("Status został zmieniony na zdalną pracę.");
 
                             case "zdalnie":
-                                newStatus = "wyjscie do klienta";
-                                string updateQuery2 = "UPDATE Rejestr SET [Status]='wyjscie do klienta' WHERE Id = @rejestrID;";
+
+                                string updateQuery2 = "UPDATE Rejestr SET [Status2]='wyjscie' WHERE Id = @rejestrID;";
                                 SqlCommand updateCommand2 = new SqlCommand(updateQuery2, myCon);
                                 updateCommand2.Parameters.AddWithValue("@rejestrId", rejestrId);
                                 updateCommand2.ExecuteNonQuery();
-                                return new JsonResult("Status został zmieniony na wyjscie do klienta.");
-
-                            case "wyjscie do klienta":
-                                newStatus = "wyjscie";
-                                string updateQuery3 = "UPDATE Rejestr SET Wyjscie = CONVERT(VARCHAR(19), DATEADD(HOUR, 2, GETDATE()), 120), Status = 'wyjscie' WHERE Id = @rejestrId;";
-                                SqlCommand updateCommand3 = new SqlCommand(updateQuery3, myCon);
-                                updateCommand3.Parameters.AddWithValue("@rejestrId", rejestrId);
-                                updateCommand3.ExecuteNonQuery();
                                 return new JsonResult("Status został zmieniony na wyjscie.");
 
+
                             case "wyjscie":
-                                newStatus = "L4";
-                                string updateQuery4 = "UPDATE Rejestr SET [Status]='L4' WHERE Id = @rejestrID;";
+
+                                string updateQuery4 = "UPDATE Rejestr SET [Status2]='L4' WHERE Id = @rejestrID;";
                                 SqlCommand updateCommand4 = new SqlCommand(updateQuery4, myCon);
                                 updateCommand4.Parameters.AddWithValue("@rejestrId", rejestrId);
                                 updateCommand4.ExecuteNonQuery();
                                 return new JsonResult("Status został zmieniony na L4.");
 
+                            case "L4":
+                                string updateQuery5 = "UPDATE Rejestr SET [Status2]='przerwa' WHERE Id = @rejestrID;";
+                                SqlCommand updateCommand5 = new SqlCommand(updateQuery5, myCon);
+                                updateCommand5.Parameters.AddWithValue("@rejestrId", rejestrId);
+                                updateCommand5.ExecuteNonQuery();
+                                return new JsonResult("Status został zmieniony na przerwe.");
+
+                            case "urlop":
+
+                                return new JsonResult("Nie możesz zmienić statusu w trakcie urlopu.");
+
+                            case "wyjazd do klienta":
+
+                                return new JsonResult("Nie możesz zmienić statusu w trakcie wyjazdu do klienta.");
+
+                            case "przerwa":
+                                string updateQuery6 = "UPDATE Rejestr SET [Status2]='w biurze' WHERE Id = @rejestrID;";
+                                SqlCommand updateCommand6 = new SqlCommand(updateQuery6, myCon);
+                                updateCommand6.Parameters.AddWithValue("@rejestrId", rejestrId);
+                                updateCommand6.ExecuteNonQuery();
+                                return new JsonResult("Status został zmieniony na prace w biurze.");
+
+
                             default:
 
-                                newStatus = "w biurze";
-                                SqlCommand newCommand5 = new SqlCommand(newStatusQuery, myCon);
-                                newCommand5.Parameters.AddWithValue("@id", @id);
-                                newCommand5.ExecuteNonQuery();
-                                return new JsonResult("Nowy status został dodany.");
+                                return new JsonResult($"Nie można zmienić aktualnego statusu {status2}");
                         }
 
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        reader.Close();
-                        SqlCommand newCommand6 = new SqlCommand(newStatusQuery, myCon);
-                        newCommand6.Parameters.AddWithValue("@id", @id);
-                        newCommand6.ExecuteNonQuery();
-                        return new JsonResult("Status został dodany.");
+                        return new JsonResult($"Wystąpił błąd: {ex.Message}");
                     }
-                }
-                else
-                {
-                    reader.Close();
-                    SqlCommand newCommand7 = new SqlCommand(newStatusQuery, myCon);
-                    newCommand7.Parameters.AddWithValue("@id", @id);
-                    newCommand7.ExecuteNonQuery();
 
-                    return new JsonResult("Statusu nie bylo, został dodany.");
+            }
+        }
+
+        [HttpPost]
+        [Route("ConfirmStatus")]
+        public JsonResult ConfirmStatus(int id)
+        {
+            string sqlDatasource = _configuration.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+            {
+                myCon.Open();
+                {
+                    try
+                    {
+                        string getLastRejestrId = "SELECT TOP 1 Id, Status2, Status FROM Rejestr WHERE PracownicyId = @id ORDER BY Id DESC;";
+                        SqlCommand lastRejestrId = new SqlCommand(getLastRejestrId, myCon);
+                        lastRejestrId.Parameters.AddWithValue("@id", id);
+                        SqlDataReader lastRejestr = lastRejestrId.ExecuteReader();
+                        int rejestrId=0;
+                        string status2 = "nic";
+                        string status = "nic";
+                        if (lastRejestr.Read()){
+                            rejestrId = lastRejestr.GetInt32(0);
+                            status2 = lastRejestr.GetString(1);   
+                            status = lastRejestr.GetString(2);                        
+                        }
+                        lastRejestr.Close();
+
+
+
+                        switch(status2){
+
+                            case "nic":
+                                return new JsonResult("nie mozna nic zrobic, brak rejestru w bazie");
+
+                            case "w biurze":
+                                if(status=="wyjscie"){
+
+                                    string newStatus = "DECLARE @currentDateTime AS VARCHAR(19); SET @currentDateTime = CONVERT(VARCHAR(19), DATEADD(HOUR, 2, GETDATE()), 120); INSERT INTO Rejestr (PracownicyId, Wejscie, Wyjscie, Status, Status2) VALUES (@id, @currentDateTime, NULL, 'wejscie', 'w biurze');";
+                                    SqlCommand updateCommand = new SqlCommand(newStatus, myCon);
+                                    updateCommand.Parameters.AddWithValue("@id", id);
+                                    updateCommand.ExecuteNonQuery();
+
+                                    return new JsonResult("Status został zmieniony.");
+                                }
+                                if(status=="przerwa"){
+                                    string updateQuery = "UPDATE Rejestr SET Wyjscie = NULL, Status = 'wejscie' WHERE Id = @rejestrId;";
+                                    SqlCommand updateCommand = new SqlCommand(updateQuery, myCon);
+                                    updateCommand.Parameters.AddWithValue("@rejestrId", rejestrId);
+                                    updateCommand.ExecuteNonQuery();
+
+                                    return new JsonResult("Praca kontunuowana po przerwie");
+                                }
+
+                                return new JsonResult("Ostatni status zostal już rozpoczety.");
+
+                            case "zdalnie":
+                                if(status=="wyjscie"){
+                                    string newStatus = "DECLARE @currentDateTime AS VARCHAR(19); SET @currentDateTime = CONVERT(VARCHAR(19), DATEADD(HOUR, 2, GETDATE()), 120); INSERT INTO Rejestr (PracownicyId, Wejscie, Wyjscie, Status, Status2) VALUES (@id, @currentDateTime, NULL, 'wejscie', 'zdalnie');";
+                                    SqlCommand updateCommand = new SqlCommand(newStatus, myCon);
+                                    updateCommand.Parameters.AddWithValue("@id", id);
+                                    updateCommand.ExecuteNonQuery();
+
+                                    return new JsonResult("Status został zmieniony.");
+                                }
+                                if(status=="przerwa"){
+                                    string updateQuery = "UPDATE Rejestr SET Wyjscie = NULL, Status = 'wejscie' WHERE Id = @rejestrId;";
+                                    SqlCommand updateCommand = new SqlCommand(updateQuery, myCon);
+                                    updateCommand.Parameters.AddWithValue("@rejestrId", rejestrId);
+                                    updateCommand.ExecuteNonQuery();
+
+                                    return new JsonResult("Praca kontunuowana po przerwie");
+                                }
+                                return new JsonResult("Ostatni status zostal już rozpoczety.");
+
+                            case "wyjscie":
+
+                                if(status=="wejscie" || status=="przerwa" ){
+                                    string updateQuery = "UPDATE Rejestr SET Wyjscie = CONVERT(VARCHAR(19), DATEADD(HOUR, 2, GETDATE()), 120), Status = 'wyjscie' WHERE Id = @rejestrId;";
+                                    SqlCommand updateCommand = new SqlCommand(updateQuery, myCon);
+                                    updateCommand.Parameters.AddWithValue("@rejestrId", rejestrId);
+                                    updateCommand.ExecuteNonQuery();
+
+                                    return new JsonResult("Status został zmieniony.");
+                                }
+
+                                return new JsonResult("Ostatni status zostal już zakonczony.");
+
+                            case "L4":
+                                if(status=="wejscie" || status2=="przerwa"){
+                                    string updateQuery = "UPDATE Rejestr SET Wyjscie = CONVERT(VARCHAR(19), DATEADD(HOUR, 2, GETDATE()), 120), Status = 'wyjscie' WHERE Id = @rejestrId;";
+                                    SqlCommand updateCommand = new SqlCommand(updateQuery, myCon);
+                                    updateCommand.Parameters.AddWithValue("@rejestrId", rejestrId);
+                                    updateCommand.ExecuteNonQuery();
+
+                                    return new JsonResult("Status został zakonczony.");
+                                }
+
+                                return new JsonResult("Ostatni status zostal już zakonczony.");
+
+
+                            case "urlop":
+                                return new JsonResult("nie mozna zmieniac statusu podczas urlopu");
+
+                            case "wyjazd do klienta":
+                                return new JsonResult("nie mozna zmieniac statusu podczas wyjazdu do klienta");
+
+                            case "przerwa":
+                                if(status=="wejscie"){
+                                    string updateQuery = "UPDATE Rejestr SET Wyjscie = CONVERT(VARCHAR(19), DATEADD(HOUR, 2, GETDATE()), 120), Status = 'przerwa' WHERE Id = @rejestrId;";
+                                    SqlCommand updateCommand = new SqlCommand(updateQuery, myCon);
+                                    updateCommand.Parameters.AddWithValue("@rejestrId", rejestrId);
+                                    updateCommand.ExecuteNonQuery();
+
+                                    return new JsonResult("Status został przerwany.");
+                                }
+                                if(status=="wyjscie"){
+                                    string updateQuery6 = "UPDATE Rejestr SET [Status2]='wyjście' WHERE Id = @rejestrID;";
+                                    SqlCommand updateCommand6 = new SqlCommand(updateQuery6, myCon);
+                                    updateCommand6.Parameters.AddWithValue("@rejestrId", rejestrId);
+                                    updateCommand6.ExecuteNonQuery();
+                                    return new JsonResult("Nie można ustawić przerwy na zakonczonym rejestrze.");
+                                }
+
+                                return new JsonResult("Ostatni status zostal już zakonczony.");
+
+                            default:
+                                return new JsonResult("nie mozna nic zrobic, niepoprawny status");
+
+
+
+                        }
+                        
+
+                        
+                    }
+                    catch (Exception ex)
+                    {
+                        return new JsonResult($"Wystąpił błąd: {ex.Message}");
+                    }
                 }
             }
         }
+
+        [HttpPost]
+        [Route("CheckUrlop")]
+        public JsonResult CheckUrlop()
+        {
+            string sqlDatasource = _configuration.GetConnectionString("DefaultConnection");
+
+            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+            {
+                myCon.Open();
+                {
+                    try
+                    {
+                        string getAllIds = "SELECT id FROM Pracownicy;";
+                        List<int> idList = new List<int>();
+                        using (SqlCommand cmd = new SqlCommand(getAllIds, myCon))
+                        {
+                            // Wykonaj zapytanie i pobierz dane
+                            using (SqlDataReader reader = cmd.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    // Dodaj id do listy
+                                    idList.Add(reader.GetInt32(0));
+                                }
+                            }
+                        }
+
+                        if(idList.Count > 0){
+                            foreach (int id in idList){
+                                //wez id ostatniego rejestru
+                                string getLastRejestrId = "SELECT TOP 1 Id FROM Rejestr WHERE PracownicyId = @id ORDER BY Id DESC;";
+                                SqlCommand lastRejestrId = new SqlCommand(getLastRejestrId, myCon);
+                                lastRejestrId.Parameters.AddWithValue("@id", id);
+                                SqlDataReader lastRejestr = lastRejestrId.ExecuteReader();
+                                int rejestrId=0;
+                                if (lastRejestr.Read()){
+                                    rejestrId = lastRejestr.GetInt32(0);
+                                }
+                                lastRejestr.Close();
+
+                                // Sprawdzenie, czy użytkownik jest aktualnie na urlopie
+                                string checkQuery = "IF EXISTS (SELECT 1 FROM Urlopy WHERE idpracownika = @id AND CONVERT(DATE, GETDATE()) BETWEEN od_kiedy AND do_kiedy) SELECT 1 ELSE SELECT 0;";
+                                SqlCommand checkCommand = new SqlCommand(checkQuery, myCon);
+                                checkCommand.Parameters.AddWithValue("@id", id);
+                                bool isOnVacation = (int)checkCommand.ExecuteScalar() == 1;
+
+                                if (!isOnVacation)
+                                {
+                                    //sprawdzamy czy ostatni rejestr dotyczy urlopu
+                                    string checkLastRejestr = "SELECT TOP 1 Status2, Wyjscie FROM Rejestr WHERE PracownicyId = @id ORDER BY Id DESC;";
+                                    SqlCommand lastRejestr2 = new SqlCommand(checkLastRejestr, myCon);
+                                    lastRejestr2.Parameters.AddWithValue("@id", id);
+                                    SqlDataReader lastRecordReader = lastRejestr2.ExecuteReader();
+
+                                    if (lastRecordReader.Read()){
+                                        string status2 = lastRecordReader.GetString(0);
+                                        DateTime? wyjscie = lastRecordReader.IsDBNull(1) ? (DateTime?)null : lastRecordReader.GetDateTime(1);
+                                        lastRecordReader.Close();
+
+                                        if(status2=="urlop"){
+                                            if(wyjscie==null){
+                                                string updateQuery = "UPDATE Rejestr SET Wyjscie = CONVERT(VARCHAR(19), DATEADD(HOUR, 2, GETDATE()), 120), Status = 'wyjscie', Status2 = 'wyjscie' WHERE Id = @rejestrId;";
+                                                SqlCommand updateCommand1 = new SqlCommand(updateQuery, myCon);
+                                                updateCommand1.Parameters.AddWithValue("@rejestrId", rejestrId);
+                                                updateCommand1.ExecuteNonQuery();
+
+                                                
+                                            }
+                                        }
+                                    }
+
+                                }
+                                else
+                                {
+                                    // Sprawdzenie, czy ostatni rejestr dotyczy urlopu
+                                    string lastRecordQuery = "SELECT TOP 1 Status2, Wyjscie, Status FROM Rejestr WHERE PracownicyId = @id ORDER BY Id DESC;";
+                                    SqlCommand lastRecordCommand = new SqlCommand(lastRecordQuery, myCon);
+                                    lastRecordCommand.Parameters.AddWithValue("@id", id);
+                                    SqlDataReader lastRecordReader = lastRecordCommand.ExecuteReader();
+
+                                    if (lastRecordReader.Read())
+                                    {
+                                        string status2 = lastRecordReader.GetString(0);
+                                        DateTime? wyjscie = lastRecordReader.IsDBNull(1) ? (DateTime?)null : lastRecordReader.GetDateTime(1);
+                                        string status = lastRecordReader.GetString(0);
+
+                                        lastRecordReader.Close();
+
+                                        if (status2 == "urlop" && !wyjscie.HasValue)
+                                        {
+                                            
+                                        }
+                                        else{
+                                            //jezeli ostatni rejestr został zakonczony
+                                            if (status == "wyjscie"){
+                                                string newRecordQuery1 = "INSERT INTO Rejestr (PracownicyId, Wejscie, Status, Status2) VALUES (@id, CONVERT(VARCHAR(19), DATEADD(HOUR, 2, GETDATE()), 120), 'wejscie', 'urlop');";
+                                                SqlCommand newRecordCommand1 = new SqlCommand(newRecordQuery1, myCon);
+                                                newRecordCommand1.Parameters.AddWithValue("@id", id);
+                                                newRecordCommand1.ExecuteNonQuery();
+
+                                                
+
+                                            }
+                                            //jezeli ostatni rejestr nie zostal zakonczony
+                                            else{
+                                                string updateQuery = "UPDATE Rejestr SET Wyjscie = CONVERT(VARCHAR(19), DATEADD(HOUR, 2, GETDATE()), 120), Status = 'wyjscie', Status2 = 'wyjscie' WHERE Id = @rejestrId;";
+                                                SqlCommand updateCommand1 = new SqlCommand(updateQuery, myCon);
+                                                updateCommand1.Parameters.AddWithValue("@rejestrId", rejestrId);
+                                                updateCommand1.ExecuteNonQuery();
+
+                                                string newRecordQuery1 = "INSERT INTO Rejestr (PracownicyId, Wejscie, Status, Status2) VALUES (@id, CONVERT(VARCHAR(19), DATEADD(HOUR, 2, GETDATE()), 120), 'wejscie', 'urlop');";
+                                                SqlCommand newRecordCommand1 = new SqlCommand(newRecordQuery1, myCon);
+                                                newRecordCommand1.Parameters.AddWithValue("@id", id);
+                                                newRecordCommand1.ExecuteNonQuery();
+
+                                                
+                                            }
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        lastRecordReader.Close();
+
+                                        string newRecordQuery = "INSERT INTO Rejestr (PracownicyId, Wejscie, Status, Status2) VALUES (@id, CONVERT(VARCHAR(19), DATEADD(HOUR, 2, GETDATE()), 120), 'wejście', 'urlop');";
+                                        SqlCommand newRecordCommand = new SqlCommand(newRecordQuery, myCon);
+                                        newRecordCommand.Parameters.AddWithValue("@id", id);
+                                        newRecordCommand.ExecuteNonQuery();
+
+                                        
+                                    }
+                                    }
+                                }
+
+                        
+                        }else{
+                            return new JsonResult("Brak użytkowników w bazie");
+                        }
+                        
+                    }
+                    catch (Exception ex)
+                    {
+                        return new JsonResult($"Wystąpił błąd: {ex.Message}");
+                    }
+                }
+            }
+            return new JsonResult("Operacja zakończona");
+        }
+
+
 
         [HttpPost]
         [Route("AddUrlop")]
