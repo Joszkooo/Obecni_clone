@@ -146,6 +146,87 @@ namespace backend.Controllers
             return new JsonResult(table);
         }
 
+        [HttpGet]
+        [Route("GetUrlopNotification")]
+        public JsonResult GetUrlopNotification(int UserId)
+        {
+            string query = "SELECT od_kiedy, do_kiedy FROM Urlopy WHERE idpracownika = @UserId AND od_kiedy BETWEEN GETDATE() AND DATEADD(day, 5, GETDATE());";
+            DataTable table = new DataTable();
+            string sqlDatasource = _configuration.GetConnectionString("DefaultConnection");
+            SqlDataReader myreader;
+
+            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+            {
+                SqlCommand myCommand = new SqlCommand(query, myCon);
+                myCommand.Parameters.AddWithValue("@UserId", UserId);
+                myCon.Open();
+                myreader = myCommand.ExecuteReader();
+                table.Load(myreader);
+                myreader.Close();
+                myCon.Close();
+            }
+
+            if (table.Rows.Count == 0)
+            {
+                // Sprawdź czy użytkownik jest aktualnie na urlopie
+                string queryCurrent = "SELECT od_kiedy, do_kiedy FROM Urlopy WHERE idpracownika = @UserId AND GETDATE() BETWEEN od_kiedy AND do_kiedy;";
+                DataTable tableCurrent = new DataTable();
+
+                using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+                {
+                    SqlCommand myCommand = new SqlCommand(queryCurrent, myCon);
+                    myCommand.Parameters.AddWithValue("@UserId", UserId);
+                    myCon.Open();
+                    myreader = myCommand.ExecuteReader();
+                    tableCurrent.Load(myreader);
+                    myreader.Close();
+                    myCon.Close();
+                }
+
+                if (tableCurrent.Rows.Count == 0)
+                {
+                    return new JsonResult("Nie masz zaplanowanych urlopów na najbliższe 5 dni.");
+                }
+                else
+                {
+                    DateTime odKiedy = (DateTime)tableCurrent.Rows[0]["od_kiedy"];
+                    DateTime doKiedy = (DateTime)tableCurrent.Rows[0]["do_kiedy"];
+
+                    return new JsonResult($"Jesteś aktualnie na urlopie od {odKiedy:yyyy-MM-dd} do {doKiedy:yyyy-MM-dd}.");
+                }
+            }
+            else
+            {   
+                string selectQuery = "SELECT DATEDIFF(day, GETDATE(), od_kiedy) AS DniDoRozpoczecia FROM Urlopy WHERE idpracownika = @UserId AND od_kiedy BETWEEN GETDATE() AND DATEADD(day, 5, GETDATE());";
+                int dni2 = 0;
+
+                using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+                {
+                    SqlCommand myCommand = new SqlCommand(selectQuery, myCon);
+                    myCommand.Parameters.AddWithValue("@UserId", UserId);
+                    myCon.Open();
+                    SqlDataReader dniReader = myCommand.ExecuteReader();
+
+                    if (dniReader.Read())
+                    {
+                        dni2 = dniReader.GetInt32(0);
+                    }
+
+                    dniReader.Close();
+                    myCon.Close();
+
+                    if(dni2==1){
+                        return new JsonResult($"Zaczynasz urlop za {dni2} dzień");
+                    }
+                    else{
+                        return new JsonResult($"Zaczynasz urlop za {dni2} dni");
+                    }
+                }
+
+ 
+            }
+        }
+
 
         [HttpGet]
         [Route("ShowStatus")]
