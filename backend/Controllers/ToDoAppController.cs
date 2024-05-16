@@ -264,7 +264,7 @@ namespace backend.Controllers
         [Route("GetHD")]
         public JsonResult GetHD(string data)
         {
-            string selectQuery = "select * from listaHD where kiedy = @data;";
+            string selectQuery = "SELECT t.idPracownika, p.imie, p.nazwisko, FORMAT(t.kiedy, 'yyyy-MM-dd') AS kiedy FROM listaHD t JOIN Pracownicy p ON t.idPracownika = p.id WHERE kiedy = @data;";
             DataTable table = new DataTable();
             string sqlDatasource = _configuration.GetConnectionString("DefaultConnection");
             SqlDataReader myreader;
