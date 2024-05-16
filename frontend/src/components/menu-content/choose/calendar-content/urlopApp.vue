@@ -2,17 +2,20 @@
   <div id="app">
     <div id="urlop">
       <div id="rightleft" v-if="isMonthlyView">
-        <button id="previousMonth" @click="previousMonth"> <img id="leftarrow" src="@/assets/ikony/left-arrow.png"> </button>
+        <button id="previousMonth" @click="previousMonth">
+          <img id="leftarrow" src="@/assets/ikony/left-arrow.png">
+        </button>
         <span>{{ monthNames[currentMonth] }}-</span>
         <span>{{ currentYear }}</span>
-        <button id="nextMonth" @click="nextMonth"><img id="rightarrow" src="@/assets/ikony/right-arrow.png"> </button>
+        <button id="nextMonth" @click="nextMonth">
+          <img id="rightarrow" src="@/assets/ikony/right-arrow.png">
+        </button>
       </div>
       <div>
         <input id="addNewEventTitle" type="text" v-model="newEvent" placeholder="Dodaj nowe wydarzenie">
         <input id="NewEventDate" type="date" v-model="selectedDate">
         <button @click="addEvent">Dodaj</button>
-        <div class="color-picker">
-        </div>
+        <div class="color-picker"></div>
       </div>
       <div v-if="isMonthlyView" class="calendar">
         <div class="daysOfWeek">
@@ -22,8 +25,8 @@
           <div v-for="day in week" :key="day.date" class="day">
             <div v-if="day.date">{{ day.date }}</div>
             <div v-for="(event, eventId) in day.events" :key="eventId" class="event">
-              <div>{{ event.summary }}</div> <!-- Poprawiono wyświetlanie nazwy wydarzenia -->
-              <button @click="removeEvent(day.fullDate, eventId)">Usuń</button>
+              <div>{{ event.summary }}</div>
+              <button @click="removeEvent(event.id)">Usuń</button>
             </div>
           </div>
         </div>
@@ -36,19 +39,19 @@
 import { gapi } from 'gapi-script';
 
 export default {
-  components: {
-  },
   data() {
     return {
       isMonthlyView: true,
       newEvent: '',
       selectedDate: '',
       daysOfWeek: ['Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota', 'Niedziela'],
-      events: [],
+      events: {},
+      weeks: [],
       currentYear: null,
       currentMonth: null,
-      monthNames: ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień']
-    }
+      monthNames: ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'],
+      calendarId: '59a6ad313c7f550c6797e8a37a562d234918fbf16ba1f3a12b0d1b8935585c0a@group.calendar.google.com\n', // Zmień na swój calendarId jeśli nie używasz domyślnego
+    };
   },
   mounted() {
     this.setCurrentDate();
@@ -58,13 +61,14 @@ export default {
     initGoogleAPI() {
       gapi.load('client:auth2', () => {
         gapi.client.init({
-          apiKey: 'AIzaSyAtzhKh_QUR1JpPY5RAignmGd-dp4kxrWk',
-          clientId: '261479002576-f0i7fvh46sf28l0v4h5v0emfsfqjn78n.apps.googleusercontent.com',
+          apiKey: 'AIzaSyBwH1RWW670JDB8PYLQlbVogTNJ7XK_KUA', // Zastąp swoim API Key
+          clientId: '261479002576-f0i7fvh46sf28l0v4h5v0emfsfqjn78n.apps.googleusercontent.com', // Zastąp swoim Client ID
           discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest'],
-          scope: 'https://www.googleapis.com/auth/calendar.events'
+          scope: 'https://www.googleapis.com/auth/calendar.events',
         }).then(() => {
-          // Autoryzacja użytkownika po załadowaniu klienta
-          return gapi.auth2.getAuthInstance().signIn();
+          gapi.auth2.getAuthInstance().signIn().then(() => {
+            this.fetchEvents();
+          });
         }).catch(error => {
           console.error('Wystąpił błąd podczas inicjalizacji Google API Client:', error);
         });
@@ -92,16 +96,16 @@ export default {
       }
       this.generateCalendar();
     },
-    async removeEvent(fullDate, eventId) {
+    async removeEvent(eventId) {
       try {
         const response = await gapi.client.calendar.events.delete({
-          calendarId: '59a6ad313c7f550c6797e8a37a562d234918fbf16ba1f3a12b0d1b8935585c0a@group.calendar.google.com\n',
-          eventId: eventId
+          calendarId: this.calendarId,
+          eventId: eventId,
         });
 
         if (response.status === 204) {
           alert('Wydarzenie zostało usunięte!');
-          this.generateCalendar();
+          this.fetchEvents();
         } else {
           alert('Wystąpił problem podczas usuwania wydarzenia.');
         }
@@ -114,7 +118,7 @@ export default {
       try {
         let selectedDate = new Date(this.selectedDate);
         if (!selectedDate || isNaN(selectedDate.getTime())) {
-          alert("Please select a valid date.");
+          alert('Proszę wybrać poprawną datę.');
           return;
         }
 
@@ -122,19 +126,19 @@ export default {
         const endDateTime = new Date(selectedDate.setHours(23, 59, 59, 999)).toISOString();
 
         const response = await gapi.client.calendar.events.insert({
-          calendarId: '59a6ad313c7f550c6797e8a37a562d234918fbf16ba1f3a12b0d1b8935585c0a@group.calendar.google.com\n',
+          calendarId: this.calendarId,
           resource: {
             summary: this.newEvent,
-            start: {dateTime: startDateTime},
-            end: {dateTime: endDateTime}
-          }
+            start: { dateTime: startDateTime },
+            end: { dateTime: endDateTime },
+          },
         });
 
         if (response.status === 200) {
           alert('Wydarzenie zostało dodane!');
           this.newEvent = '';
           this.selectedDate = '';
-          this.generateCalendar();
+          this.fetchEvents();
         } else {
           alert('Wystąpił problem podczas dodawania wydarzenia.');
         }
@@ -151,21 +155,21 @@ export default {
       let dayCounter = 1;
 
       // Poprawka na pierwszy dzień miesiąca
-      let startDay = firstDay === 0 ? 6 : firstDay - 1; // Poniedziałek - 0, Wtorek - 1, ..., Niedziela - 6
+      let startDay = firstDay === 0 ? 6 : firstDay - 1;
       for (let i = 0; i < startDay; i++) {
         currentWeek.push({
-          date: null, // Dzień miesiąca nie istnieje dla tych dni
-          fullDate: null, // Dodajemy pole pełnej daty
-          events: []
+          date: null,
+          fullDate: null,
+          events: [],
         });
       }
 
       for (let i = startDay; i < 7; i++) {
-        const fullDate = `${this.currentYear}-${this.currentMonth + 1 < 10 ? '0' + (this.currentMonth + 1) : this.currentMonth + 1}-${dayCounter < 10 ? '0' + dayCounter : dayCounter}`;
+        const fullDate = `${this.currentYear}-${(this.currentMonth + 1).toString().padStart(2, '0')}-${dayCounter.toString().padStart(2, '0')}`;
         currentWeek.push({
           date: dayCounter,
-          fullDate: fullDate, // Dodajemy pełną datę dla każdego dnia
-          events: this.events[fullDate] || [] // Przypisanie eventów do danego dnia
+          fullDate: fullDate,
+          events: this.events[fullDate] || [],
         });
         dayCounter++;
       }
@@ -175,18 +179,46 @@ export default {
       while (dayCounter <= daysInMonth) {
         currentWeek = [];
         for (let i = 0; i < 7 && dayCounter <= daysInMonth; i++) {
-          const fullDate = `${this.currentYear}-${this.currentMonth + 1 < 10 ? '0' + (this.currentMonth + 1) : this.currentMonth + 1}-${dayCounter < 10 ? '0' + dayCounter : dayCounter}`;
+          const fullDate = `${this.currentYear}-${(this.currentMonth + 1).toString().padStart(2, '0')}-${dayCounter.toString().padStart(2, '0')}`;
           currentWeek.push({
             date: dayCounter,
-            fullDate: fullDate, // Dodajemy pełną datę dla każdego dnia
-            events: this.events[fullDate] || [] // Przypisanie eventów do danego dnia
+            fullDate: fullDate,
+            events: this.events[fullDate] || [],
           });
           dayCounter++;
         }
         weeks.push(currentWeek);
       }
       this.weeks = weeks;
-    }
+    },
+    async fetchEvents() {
+      try {
+        const response = await gapi.client.calendar.events.list({
+          calendarId: this.calendarId,
+          timeMin: new Date(this.currentYear, this.currentMonth, 1).toISOString(),
+          timeMax: new Date(this.currentYear, this.currentMonth + 1, 0).toISOString(),
+          showDeleted: false,
+          singleEvents: true,
+          orderBy: 'startTime',
+        });
+
+        this.events = response.result.items.reduce((events, event) => {
+          const date = event.start.dateTime || event.start.date;
+          const eventDate = new Date(date).toISOString().split('T')[0];
+          if (!events[eventDate]) {
+            events[eventDate] = [];
+          }
+          events[eventDate].push({
+            id: event.id,
+            summary: event.summary,
+          });
+          return events;
+        }, {});
+        this.generateCalendar();
+      } catch (error) {
+        console.error('Wystąpił błąd podczas pobierania wydarzeń:', error);
+      }
+    },
   },
   computed: {
     computedDaysOfWeek() {
@@ -194,9 +226,9 @@ export default {
       const daysBeforeFirstDay = this.daysOfWeek.slice(firstDayIndex);
       const daysAfterFirstDay = this.daysOfWeek.slice(0, firstDayIndex);
       return [...daysBeforeFirstDay, ...daysAfterFirstDay];
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style>

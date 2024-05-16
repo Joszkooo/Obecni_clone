@@ -7,6 +7,11 @@ export default {
   components: {GoogleLogin},
   data(){
     return{
+      urlop: {
+        start: "",
+        end: "",
+        info: ""
+      },
       formularzPokazany: false,
       loggedIn: false,
       user: null,
@@ -16,6 +21,7 @@ export default {
       selectedDateEnd: '',
       duration: 0,
       selectedUserId: null,
+      freeDay: '',
       callback:(response)=> {
         console.log("zalogowano")
         this.loggedIn = true
@@ -26,6 +32,22 @@ export default {
     }
   },
   methods:{
+    statusofwork(id) {
+      axios.post("https://localhost:7285/api/ToDoApp/ChangeStatus2?id="+id)
+          .then((response) => {
+            console.log(response.data)
+            this.showTable()
+      })
+
+    },
+    confirmstatus(id) {
+      axios.post("https://localhost:7285/api/ToDoApp/ConfirmStatus?id="+id)
+          .then((response) => {
+            alert(response.data)
+            this.showTable()
+          })
+
+    },
     calculateDuration() {
       if (this.selectedDateStart && this.selectedDateEnd && this.selectedDateStart<this.selectedDateEnd) {
         const startDate = new Date(this.selectedDateStart);
@@ -43,60 +65,83 @@ export default {
         this.selectedDateStart =  '';
         this.selectedDateEnd='';
         this.duration='';
+        this.urlop.end='';
+        this.urlop.start='';
       }
       console.log(this.selectedUserId)
     },
     async showTable() {
       axios.get("https://localhost:7285/api/ToDoApp/GetPracownik")
           .then(response => {
-            this.notes = response.data.map(note => ({ ...note, status: '',wejscie: '', wyjscie: '' }));
+            this.notes = response.data.map(note => ({ ...note, status: '',wejscie: '', wyjscie: '', status2: '' }));
             this.notes.forEach(note => this.showlaststatus(note.Id));
           })
           .catch(error => {
             console.error('Wystąpił błąd podczas pobierania notatek:', error);
           });
     },
-    showlaststatus(id) {
-      axios.get("https://localhost:7285/api/ToDoApp/ShowStatus?id=" + id)
+    getUrlop(id) {
+      axios.get("https://localhost:7285/api/ToDoApp/GetUrlop?UserId="+id)
           .then(response => {
-            const status = response.data[0].Status;
-            const wejscie = response.data[0].Wejscie;
-            const godzina_wejscia = moment(wejscie);
-            const wyjscie = response.data[0].Wyjscie;
-            const godzina_wyjscia = wyjscie ? moment(wyjscie) : null;
+           console.log(response.data)
+            this.urlop.start = moment(response.data[0].od_kiedy).format('YYYY-MM-DD');
+            this.urlop.end = moment(response.data[0].do_kiedy).format('YYYY-MM-DD');
+
+    })
+    },
+    getUrlopnoti(id) {
+      axios.get('https://localhost:7285/api/ToDoApp/GetUrlopNotification?UserId='+id)
+          .then(response => {
+              this.urlop.info = response.data
+          })
+    },
+    showlaststatus(id) {
+      axios.get(`https://localhost:7285/api/ToDoApp/ShowStatus?id=${id}`)
+          .then(response => {
+            const data = response.data[0];
+            const status = data.Status;
+            const status2 = data.Status2;
+            const entry = data.Wejscie;
+            const entryTime = moment(entry, 'HH:mm:ss');
+            const exit = data.Wyjscie;
+            const exitTime = exit ? moment(exit, 'HH:mm:ss') : null; // Użyj bieżącego czasu, jeśli nie ma czasu wyjścia
+
             const note = this.notes.find(note => note.Id === id);
 
             if (note) {
+              note.status2 = status2;
               note.status = status;
-              note.wejscie = godzina_wejscia.format('HH:mm');
-              note.wyjscie = godzina_wyjscia ? godzina_wyjscia.format('HH:mm') : null;
+              note.wejscie = entryTime.format('HH:mm');
+              note.wyjscie = exitTime ? exitTime.format('HH:mm') : null; // Użyj czasu wyjścia lub bieżącego czasu
 
-              // Jeśli nie ma czasu wyjścia, korzystaj z setInterval() do aktualizacji czasu pracy
-              if (!wyjscie) {
-                setInterval(() => {
-                  const start_time = godzina_wejscia;
-                  const end_time = moment();
-                  const duration = moment.duration(end_time.diff(start_time));
-                  const hours = duration.hours();
-                  const minutes = duration.minutes();
-                  const seconds = duration.seconds();
-                  const czasString = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-                  note.worktime = czasString;
-                }, 1000);
-              } else { // Jeśli jest czas wyjścia, oblicz czas pracy normalnie
-                const duration = moment.duration(godzina_wyjscia.diff(godzina_wejscia));
-                const hours = duration.hours();
-                const minutes = duration.minutes();
-                const seconds = duration.seconds();
-                const czasString = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-                note.worktime = czasString;
-              }
+              // Oblicz i zaktualizuj czas pracy
+              const updateWorkTime = () => {
+                const now = moment();
+                const start = entryTime;
+                const end = exitTime || now;
+
+                // Jeśli czas wyjścia jest wcześniejszy niż czas wejścia, dodaj jeden dzień do czasu wyjścia
+                if (exitTime && exitTime.isBefore(entryTime)) {
+                  end.add(1, 'day');
+                }
+
+                const duration = moment.duration(end.diff(start));
+                const hours = Math.max(duration.hours(), 0).toString().padStart(2, '0');
+                const minutes = Math.max(duration.minutes(), 0).toString().padStart(2, '0');
+                const seconds = Math.max(duration.seconds(), 0).toString().padStart(2, '0');
+                note.worktime = `${hours}:${minutes}:${seconds}`;
+              };
+
+              // Uruchom setInterval, aby co sekundę aktualizować czas pracy
+              updateWorkTime(); // Wywołaj raz, aby zainicjować czas pracy
+              setInterval(updateWorkTime, 1000);
             }
           })
           .catch(error => {
             console.error('Wystąpił błąd podczas pobierania statusu:', error);
           });
     },
+
 
     changeStatus(id){
       axios.post("https://localhost:7285/api/ToDoApp/ChangeStatus?id="+id).then(
@@ -107,12 +152,21 @@ export default {
 
       )
     },
+
     addUrlop(od_kiedy,do_kiedy){
       axios.post("https://localhost:7285/api/ToDoApp/AddUrlop?id="+this.selectedUserId+"&od_kiedy="+od_kiedy+"&do_kiedy="+do_kiedy).then(
           (response)=>{
             alert(response.data);
             console.log(this.selectedUserId);
 
+          }
+
+      )
+    },
+    Checkurlop(){
+      axios.post("https://localhost:7285/api/ToDoApp/CheckUrlop").then(
+          (response)=>{
+            alert(response.data);
           }
 
       )
@@ -129,9 +183,10 @@ export default {
           }
 
       )
-    }
+    },
   },mounted:function() {
     this.showTable()
+    this.Checkurlop()
   }
 }
 </script>
@@ -140,7 +195,7 @@ export default {
     <table class="tabelacroll">
       <thead class="rounded-header">
       <tr>
-        <th>Pracownik</th>
+        <th><img src="@/assets/ikony/user.png" style="width: 1.3vw; margin-right: 4%">Pracownik</th>
         <th>Status</th>
         <th>Czas Pracy</th>
         <th>Wejście</th>
@@ -152,27 +207,37 @@ export default {
       <tbody style="border-radius: 5px">
       <tr v-for="(note,  index) in notes" :key="note.id" :class="{ 'odd-row': index % 2 === 0, 'even-row': index % 2 === 1 }">
         <td>{{ note.Imie }} {{ note.Nazwisko }}</td>
-        <td><a @click="changeStatus(note.Id)">{{ note.status }}</a></td>
+        <td>{{ note.status }}</td>
         <td>{{ note.worktime }}</td>
         <td>{{ note.wejscie }}</td>
         <td>{{ note.wyjscie }}</td>
-        <td><img v-if="note.status === 'wejscie'" style="width: 2vw" src="@/assets/ikony/stop-button.png">
-          <img v-else-if="note.status === 'wyjscie'" style="width: 2vw" src="@/assets/ikony/briefcase.png"></td>
+        <td>
+          <a @click="statusofwork(note.Id)">
+            <img v-if="note.status2 === 'zdalnie'" style="width: 2vw" src="@/assets/ikony/zdalnie.png">
+            <img v-if="note.status2 === 'wyjscie'" style="width: 2vw" src="@/assets/ikony/wyjscie.png">
+            <img v-if="note.status2 === 'L4'" style="width: 2vw" src="@/assets/ikony/l4.png">
+            <img v-if="note.status2 === 'przerwa'" style="width: 2vw" src="@/assets/ikony/przerwa.png">
+            <img v-if="note.status2 === 'w biurze'" style="width: 2vw" src="@/assets/ikony/w_biurze.png">
+            <img v-if="note.status2 === 'urlop'" style="width: 2vw" src="@/assets/ikony/urlop.png">
+        </a>
+          <a @click="confirmstatus(note.Id)">
+            <img style="width: 2vw; margin-left: 4%" src="@/assets/ikony/check.png">
+          </a>
+        </td>
         <td>
           <div class="blur" v-if="formularzPokazany" style="position: fixed; right: 1px;bottom: 1px"></div>
           <div class="urlop-formularz" v-if="formularzPokazany">
             <form class="formurlop" @submit.prevent="addUrlop(selectedDateStart,selectedDateEnd)">
-              <label>Ile masz dni urlopu: {{20-duration}}</label><br>
+              <label>{{ this.urlop.info }}</label><br>
               <label>Wybierz urlop</label><br>
               <input type="date" id="poczatek_urlop" v-model="selectedDateStart" @input="calculateDuration">
               <input type="date" id="koniec_urlopu" v-model="selectedDateEnd" @input="calculateDuration"><br>
-              <label>{{selectedDateStart}}</label>
-              <label>{{selectedDateEnd}}</label><br>
               <input class="submitbutton" type="submit" value="Enjoy your holiday!" >
-              <input class="closebutton" type="button" value="Zamknij" @click="pokazFormularz(note.Id)">
+<!--              <input class="test" type="button" @click="getUrlop(this.selectedUserId)">-->
+              <input class="closebutton" type="button" value="Zamknij" @click="pokazFormularz(this.selectedUserId)">
             </form>
           </div>
-          <a @click="pokazFormularz(note.Id)">
+          <a @click="pokazFormularz(note.Id);getUrlopnoti(note.Id)">
             <img src="@/assets/ikony/calendar.png" style="width: 3vw">
           </a>
         </td>
