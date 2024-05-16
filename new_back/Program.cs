@@ -2,6 +2,10 @@ global using new_back.Models;
 global using Microsoft.EntityFrameworkCore;
 global using new_back.Data;
 global using Microsoft.AspNetCore.Mvc;
+global using AutoMapper;
+global using new_back.Services.PracownikService;
+global using System.Data.SqlClient;
+global using System.Data;
 
 using Newtonsoft.Json.Serialization;
 
@@ -14,6 +18,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 // JSON serializer
 builder.Services.AddControllers().AddNewtonsoftJson(options=>

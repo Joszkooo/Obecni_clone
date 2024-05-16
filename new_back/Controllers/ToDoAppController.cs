@@ -2,43 +2,26 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
 namespace backend.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ToDoAppController : ControllerBase
+    public class PracownikController : ControllerBase
     {
-        private readonly IConfiguration _configuration;
+        private readonly IPracownikService _characterService;
 
-        public ToDoAppController(IConfiguration configuration)
+        public PracownikController(IPracownikService characterService)
         {
-            _configuration = configuration;
+            _characterService = characterService;
         }
 
         [HttpGet]
         [Route("GetPracownik")]
         public JsonResult GetPracownik()
         {
-            string query = "SELECT * FROM dbo.Pracownicy";
-            DataTable table = new DataTable();
-            string sqlDatasource = _configuration.GetConnectionString("DefaultConnection");
-            SqlDataReader myreader;
-
-            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
-            {
-                SqlCommand myCommand = new SqlCommand(query, myCon);
-                myCon.Open();
-                myreader = myCommand.ExecuteReader();
-                table.Load(myreader);
-                myreader.Close();
-                myCon.Close();
-            }
-
-            return new JsonResult(table);
+            
+            return new JsonResult(_characterService.GetPracownik());
         }
 
         [HttpGet]

@@ -3,21 +3,44 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+
 namespace new_back.Services.PracownikService
 {
-    public class PracownikService : IPracownikService
+    public class PracownikService : ControllerBase, IPracownikService
     {
-        public PracownikService()
+        private readonly IConfiguration _configuration;
+
+        public PracownikService(IConfiguration configuration)
         {
-            throw new NotImplementedException();
+            _configuration = configuration;
+        }
+        private readonly IMapper _mapper;
+
+        public PracownikService(IMapper mapper)
+        {
+            _mapper = mapper;
         }
 
-        public JsonResult GetPracownik()
+        public async Task<JsonResult> GetPracownik()
         {
-            throw new NotImplementedException();
+            string query = "SELECT * FROM dbo.Pracownicy";
+            DataTable table = new DataTable();
+            string sqlDatasource = _configuration.GetConnectionString("DefaultConnection");
+            SqlDataReader myreader;
+
+            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+            {
+                SqlCommand myCommand = new SqlCommand(query, myCon);
+                myCon.Open();
+                myreader = myCommand.ExecuteReader();
+                table.Load(myreader);
+                myreader.Close();
+                myCon.Close();
+            }
+            return table;
         }
 
-        public JsonResult ShowKlienci()
+        public async Task<JsonResult> ShowKlienci()
         {
             throw new NotImplementedException();
         }
