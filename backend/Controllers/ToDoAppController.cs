@@ -150,7 +150,7 @@ namespace backend.Controllers
         [Route("GetUrlopNotification")]
         public JsonResult GetUrlopNotification(int UserId)
         {
-            string query = " SELECT od_kiedy, do_kiedy FROM Urlopy WHERE idpracownika = 3 AND od_kiedy BETWEEN GETDATE() AND DATEADD(day, 5, GETDATE());";
+            string query = " SELECT od_kiedy, do_kiedy FROM Urlopy WHERE idpracownika = @UserId AND od_kiedy BETWEEN GETDATE() AND DATEADD(day, 5, GETDATE());";
             DataTable table = new DataTable();
             string sqlDatasource = _configuration.GetConnectionString("DefaultConnection");
             SqlDataReader myreader;
@@ -197,7 +197,7 @@ namespace backend.Controllers
             }
             else
             {   
-                string selectQuery = "SELECT DATEDIFF(day, GETDATE(), od_kiedy) AS DniDoRozpoczecia FROM Urlopy WHERE idpracownika = @UserId AND od_kiedy BETWEEN GETDATE() AND DATEADD(day, 5, GETDATE());";
+                string selectQuery = "SELECT DATEDIFF(day, GETDATE(), od_kiedy) AS DniDoRozpoczecia FROM Urlopy WHERE idpracownika = @UserId AND od_kiedy BETWEEN GETDATE() AND DATEADD(day, 5, GETDATE())  ORDER BY od_kiedy;";
                 int dni2 = 0;
 
                 using (SqlConnection myCon = new SqlConnection(sqlDatasource))
