@@ -11,7 +11,7 @@
 
 <style scoped>
 #noti {
-  height: 13vw;
+  //height: 13vw;
   width: 70%;
   background-color: #101936;
   border-radius: 15px;

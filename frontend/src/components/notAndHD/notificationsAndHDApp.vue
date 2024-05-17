@@ -19,7 +19,7 @@ export default {
 
 <style scoped>
 #notifications {
-  height: 200px;
+  //height: 200px;
   width: 100%;
   float: right;
   display: flex;
