@@ -37,10 +37,34 @@ namespace new_back.Services.PracownikService
                 myreader.Close();
                 myCon.Close();
             }
-            return table;
+            return null;
         }
 
         public async Task<JsonResult> ShowKlienci()
+        {
+            string query = "SELECT imie, nazwisko FROM Klienci;";
+            DataTable table = new DataTable();
+            string sqlDatasource = _configuration.GetConnectionString("DefaultConnection");
+            SqlDataReader myreader;
+
+            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+            {
+                SqlCommand myCommand = new SqlCommand(query, myCon);
+                myCon.Open();
+                myreader = myCommand.ExecuteReader();
+                table.Load(myreader);
+                myreader.Close();
+                myCon.Close();
+            }
+            return null;
+        }
+
+        JsonResult IPracownikService.GetPracownik()
+        {
+            throw new NotImplementedException();
+        }
+
+        JsonResult IPracownikService.ShowKlienci()
         {
             throw new NotImplementedException();
         }

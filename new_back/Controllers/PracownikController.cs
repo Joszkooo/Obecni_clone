@@ -9,6 +9,13 @@ namespace backend.Controllers
 {
     public class PracownikController : ControllerBase
     {
+        private readonly IConfiguration _configuration;
+
+        public PracownikController(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
         private readonly IPracownikService _characterService;
 
         public PracownikController(IPracownikService characterService)
@@ -58,22 +65,9 @@ namespace backend.Controllers
         [Route("ShowClients")]
         public JsonResult ShowKlienci()
         {
-            string query = "SELECT imie, nazwisko FROM Klienci;";
-            DataTable table = new DataTable();
-            string sqlDatasource = _configuration.GetConnectionString("DefaultConnection");
-            SqlDataReader myreader;
+            
 
-            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
-            {
-                SqlCommand myCommand = new SqlCommand(query, myCon);
-                myCon.Open();
-                myreader = myCommand.ExecuteReader();
-                table.Load(myreader);
-                myreader.Close();
-                myCon.Close();
-            }
-
-            return new JsonResult(table);
+            return new JsonResult(_characterService.ShowKlienci());
         }
 
 
