@@ -42,6 +42,31 @@ namespace backend.Controllers
         }
 
         [HttpGet]
+        [Route("GetRejestrPracownika")]
+        public JsonResult GetRejestrPracownika(int idPracownika, string dzien)
+        {
+            string query = "SELECT Id, PracownicyId, FORMAT(Wejscie, 'HH:mm:ss') AS Wejscie, FORMAT(Wyjscie, 'HH:mm:ss') AS Wyjscie, Status, Status2 FROM Rejestr WHERE PracownicyId = @idPracownika AND CAST(Wejscie AS DATE) = @dzien;";
+            DataTable table = new DataTable();
+            string sqlDatasource = _configuration.GetConnectionString("DefaultConnection");
+            SqlDataReader myreader;
+
+            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+            {
+                SqlCommand myCommand = new SqlCommand(query, myCon);
+                myCommand.Parameters.AddWithValue("@idPracownika", idPracownika);
+                myCommand.Parameters.AddWithValue("@dzien", dzien);
+                myCon.Open();
+                myreader = myCommand.ExecuteReader();
+                table.Load(myreader);
+                myreader.Close();
+                myCon.Close();
+            }
+
+            return new JsonResult(table);
+        }
+
+        
+        [HttpGet]
         [Route("Verify")]
         public JsonResult Verify(string email)
         {
@@ -230,9 +255,9 @@ namespace backend.Controllers
 
         [HttpGet]
         [Route("ShowStatus")]
-        public JsonResult ShowStatus(int id)
+        public JsonResult ShowStatus(int id, string dzien)
         {
-            string selectQuery = "SELECT TOP 1 Id, PracownicyId, FORMAT(Wejscie, 'HH:mm:ss') AS Wejscie, FORMAT(Wyjscie, 'HH:mm:ss') AS Wyjscie, Status, Status2 FROM Rejestr WHERE PracownicyId = @id ORDER BY Id DESC;";
+            string selectQuery = "SELECT TOP 1 Id, PracownicyId, FORMAT(Wejscie, 'HH:mm:ss') AS Wejscie, FORMAT(Wyjscie, 'HH:mm:ss') AS Wyjscie, Status, Status2 FROM Rejestr WHERE PracownicyId = @id AND CAST(Wejscie AS DATE) = @dzien ORDER BY Id DESC;";
             DataTable table = new DataTable();
             string sqlDatasource = _configuration.GetConnectionString("DefaultConnection");
             SqlDataReader myreader;
@@ -241,6 +266,7 @@ namespace backend.Controllers
             {
                 SqlCommand myCommand = new SqlCommand(selectQuery, myCon);
                 myCommand.Parameters.AddWithValue("@id", id);
+                myCommand.Parameters.AddWithValue("@dzien", dzien);
                 myCon.Open();
                 myreader = myCommand.ExecuteReader();
                 table.Load(myreader);
@@ -257,7 +283,6 @@ namespace backend.Controllers
                     return new JsonResult("Brak rejestru"); 
                 }
         }
-
 
 
         [HttpGet]
