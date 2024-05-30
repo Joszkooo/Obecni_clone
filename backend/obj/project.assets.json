@@ -1156,19 +1156,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\mariu\\.nuget\\packages\\": {}
+    "/Users/kamilaiwon/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\mariu\\Desktop\\piatek\\Obecni_clone\\backend\\webapi.csproj",
+      "projectUniqueName": "/Users/kamilaiwon/Desktop/piatek-update/Obecni_clone/backend/webapi.csproj",
       "projectName": "webapi",
-      "projectPath": "C:\\Users\\mariu\\Desktop\\piatek\\Obecni_clone\\backend\\webapi.csproj",
-      "packagesPath": "C:\\Users\\mariu\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\mariu\\Desktop\\piatek\\Obecni_clone\\backend\\obj\\",
+      "projectPath": "/Users/kamilaiwon/Desktop/piatek-update/Obecni_clone/backend/webapi.csproj",
+      "packagesPath": "/Users/kamilaiwon/.nuget/packages/",
+      "outputPath": "/Users/kamilaiwon/Desktop/piatek-update/Obecni_clone/backend/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\mariu\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "/Users/kamilaiwon/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
@@ -1228,7 +1228,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.100\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.406/RuntimeIdentifierGraph.json"
       }
     }
   }

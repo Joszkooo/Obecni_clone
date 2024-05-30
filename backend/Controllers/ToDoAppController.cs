@@ -255,25 +255,22 @@ namespace backend.Controllers
 
         [HttpGet]
         [Route("ShowStatus")]
-        public JsonResult ShowStatus(int id, string dzien)
+        public JsonResult ShowStatus(int id)
         {
-            string selectQuery = "SELECT TOP 1 Id, PracownicyId, FORMAT(Wejscie, 'HH:mm:ss') AS Wejscie, FORMAT(Wyjscie, 'HH:mm:ss') AS Wyjscie, Status, Status2 FROM Rejestr WHERE PracownicyId = @id AND CAST(Wejscie AS DATE) = @dzien ORDER BY Id DESC;";
+            string selectQuery = "SELECT TOP 1 Id, PracownicyId, FORMAT(Wejscie, 'HH:mm:ss') AS Wejscie, FORMAT(Wyjscie, 'HH:mm:ss') AS Wyjscie, Status, Status2 FROM Rejestr WHERE PracownicyId = @id ORDER BY Id DESC;";
             DataTable table = new DataTable();
             string sqlDatasource = _configuration.GetConnectionString("DefaultConnection");
             SqlDataReader myreader;
-
             using (SqlConnection myCon = new SqlConnection(sqlDatasource))
             {
                 SqlCommand myCommand = new SqlCommand(selectQuery, myCon);
                 myCommand.Parameters.AddWithValue("@id", id);
-                myCommand.Parameters.AddWithValue("@dzien", dzien);
                 myCon.Open();
                 myreader = myCommand.ExecuteReader();
                 table.Load(myreader);
                 myreader.Close();
                 myCon.Close();
             }
-
                 if (table.Rows.Count > 0)
                 {
                     return new JsonResult(table);
@@ -400,7 +397,7 @@ namespace backend.Controllers
                             status2 = lastRejestr.GetString(1);
                         }
                         lastRejestr.Close();
-
+                        
                         if(rejestrId == 0){
                             string newStatus = "DECLARE @currentDateTime AS VARCHAR(19); SET @currentDateTime = CONVERT(VARCHAR(19), DATEADD(HOUR, 2, GETDATE()), 120); INSERT INTO Rejestr (PracownicyId, Wejscie, Wyjscie, Status) VALUES (@id, @currentDateTime, NULL, 'wejscie', 'w biurze');";
                             SqlCommand command = new SqlCommand(newStatus, myCon);
