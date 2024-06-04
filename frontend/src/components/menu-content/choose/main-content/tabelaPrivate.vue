@@ -7,11 +7,15 @@ export default {
   components: {GoogleLogin},
   data(){
     return{
+      currentDate: moment(),
       urlop: {
         start: "",
         end: "",
         info: ""
       },
+      allstatus: [],
+      day_date1: '2024-05-30',
+      statusPokazany: false,
       formularzPokazany: false,
       loggedIn: false,
       user: null,
@@ -70,6 +74,10 @@ export default {
       }
       console.log(this.selectedUserId)
     },
+    pokazallstatus(id) {
+      this.selectedUserId = id;
+      this.statusPokazany = !this.statusPokazany
+    },
     async showTable() {
       axios.get("https://localhost:7285/api/ToDoApp/GetPracownik")
           .then(response => {
@@ -96,7 +104,8 @@ export default {
           })
     },
     showlaststatus(id) {
-      axios.get(`https://localhost:7285/api/ToDoApp/ShowStatus?id=${id}`)
+      const day_date = this.currentDate.format('YYYY-MM-DD');
+      axios.get(`https://localhost:7285/api/ToDoApp/ShowStatus?id=`+id+`&dzien=`+day_date)
           .then(response => {
             const data = response.data[0];
             const status = data.Status;
@@ -176,22 +185,43 @@ export default {
       this.loggedIn = false
     },
 
-    verify(email){
-      axios.get("https://localhost:7285/api/ToDoApp/Verify?email="+email).then(
+    getallrejestr(id,day_date){
+      axios.get('https://localhost:7285/api/ToDoApp/GetRejestrPracownika?idPracownika='+id+'&dzien='+day_date).then(
           (response)=>{
-            alert(response.data);
+            console.log(response.data);
+            this.allstatus = response.data;
           }
 
       )
     },
+    prevDay() {
+      this.currentDate = this.currentDate.subtract(1, 'days');
+      console.log(this.currentDate)
+    },
+    nextDay() {
+      this.currentDate = this.currentDate.add(1, 'days');
+      console.log(this.currentDate)
+
+    }
+
   },mounted:function() {
     this.showTable()
     this.Checkurlop()
-  }
+  },
+  computed: {
+    formattedDate() {
+      return moment(this.currentDate).format('YYYY-MM-DD');
+    }
+  },
 }
 </script>
 <template>
   <div id="tabela-container" >
+    <div class="date-navigation">
+      <button class="pervday" @click="prevDay"><img src="@/assets/ikony/left-arrow.png" style="width: 1vw"></button>
+      <span class="currentdate">{{ currentDate.format('YYYY-MM-DD') }}</span>
+      <button class="nextday" @click="nextDay"><img src="@/assets/ikony/right-arrow.png" style="width: 1vw"></button>
+    </div>
     <table class="tabelacroll">
       <thead class="rounded-header">
       <tr>
@@ -206,7 +236,21 @@ export default {
       </thead>
       <tbody style="border-radius: 5px">
       <tr v-for="(note,  index) in notes" :key="note.id" :class="{ 'odd-row': index % 2 === 0, 'even-row': index % 2 === 1 }">
-        <td>{{ note.Imie }} {{ note.Nazwisko }}</td>
+        <td>
+          <div class="blur" v-if="statusPokazany" style="position: fixed; right: 1px;bottom: 1px"></div>
+          <div class="allstatus" v-if="statusPokazany">
+            <label>
+              <div v-for="status in allstatus" :key="status.Id">
+                {{ status.Wejscie }}
+                {{ status.Wyjscie }}
+                {{ status.Status }}
+                {{ status.Status2 }}
+              </div>
+            </label>
+            <button class="closebutton" @click="pokazallstatus(this.selectedUserId)"></button>
+          </div>
+          <a @click="pokazallstatus(note.Id); getallrejestr(note.Id,currentDate.format('YYYY-MM-DD'))">{{ note.Imie }} {{ note.Nazwisko }}</a>
+        </td>
         <td>{{ note.status }}</td>
         <td>{{ note.worktime }}</td>
         <td>{{ note.wejscie }}</td>
@@ -249,6 +293,21 @@ export default {
 </template>
 
 <style scoped>
+.currentdate {
+  background-color: #101936;
+  padding: 5px 3%;
+  border-radius: 10px;
+  color: white;
+  margin-left: 1%;
+  margin-right: 1%;
+}
+.pervday, .nextday{
+  background-color: #101936;
+  padding: 5px;
+  border-radius: 10px;
+  border: none;
+  text-align: center;
+}
 
 
 .tabelacroll {
@@ -359,6 +418,18 @@ thead th {
   width: 100%;
   height: 100%;
 }
+.allstatus {
+  width: 30%;
+  height: 30%;
+  background-color:#101936 ;
+  z-index: 1000;
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 1px solid white;
+  border-radius: 10px;
+}
 .urlop-formularz {
   background-color: #101936;
   border-radius: 10px;
@@ -390,5 +461,12 @@ thead th {
 .formurlop {
   padding: 60px;
 }
+.date-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2%;
+}
+
 
 </style>
