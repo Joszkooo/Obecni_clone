@@ -1,30 +1,32 @@
 {
   "format": 1,
   "restore": {
-    "/Users/kamilaiwon/Desktop/piatek-update/Obecni_clone/backend/webapi.csproj": {}
+    "D:\\CODE\\Obecni_clone\\backend\\webapi.csproj": {}
   },
   "projects": {
-    "/Users/kamilaiwon/Desktop/piatek-update/Obecni_clone/backend/webapi.csproj": {
+    "D:\\CODE\\Obecni_clone\\backend\\webapi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/kamilaiwon/Desktop/piatek-update/Obecni_clone/backend/webapi.csproj",
+        "projectUniqueName": "D:\\CODE\\Obecni_clone\\backend\\webapi.csproj",
         "projectName": "webapi",
-        "projectPath": "/Users/kamilaiwon/Desktop/piatek-update/Obecni_clone/backend/webapi.csproj",
-        "packagesPath": "/Users/kamilaiwon/.nuget/packages/",
-        "outputPath": "/Users/kamilaiwon/Desktop/piatek-update/Obecni_clone/backend/obj/",
+        "projectPath": "D:\\CODE\\Obecni_clone\\backend\\webapi.csproj",
+        "packagesPath": "C:\\Users\\joszko\\.nuget\\packages\\",
+        "outputPath": "D:\\CODE\\Obecni_clone\\backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/kamilaiwon/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\joszko\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "net7.0"
+          "net8.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "net7.0": {
-            "targetAlias": "net7.0",
+          "net8.0": {
+            "targetAlias": "net8.0",
             "projectReferences": {}
           }
         },
@@ -32,11 +34,16 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
-        "net7.0": {
-          "targetAlias": "net7.0",
+        "net8.0": {
+          "targetAlias": "net8.0",
           "dependencies": {
             "Microsoft.AspNetCore.Mvc.NewtonsoftJson": {
               "target": "Package",
@@ -74,7 +81,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.406/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
