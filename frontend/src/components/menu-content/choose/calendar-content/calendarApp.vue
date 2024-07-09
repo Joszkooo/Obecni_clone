@@ -1,9 +1,9 @@
 <template>
   <div id="menuuu">
-    <a href="#" id="toggle-menu" @click="toggleMenu" class="button"><img id="ikona2" src="../../../../assets/ikony/calendar_color.png"> {{isMenuActive ? 'Kalendarz' : 'Kalendarz v' }}</a>
+    <a href="#" id="toggle-menu" @click="toggleMenu" class="button"><img id="ikona2" src="../../../../assets/ikony/calendar_color.png"> Kalendarz <img v-if="!isMenuActive" style="width: 1vw" src="@/assets/ikony/center-arrow.png"> </a>
     <ul class="menu" :class="{ 'active': isMenuActive }">
       <li><router-link class="urlop" :to="{ name: 'urlop' }">Urlop</router-link></li>
-      <li>Wyjazd do klienta</li>
+      <li><router-link class="wolnezkalendarza" :to="{ name: 'wolnezkalendarza' }">coś tu bedzie</router-link></li>
       <li>HD</li>
       <li>Fajrant</li>
     </ul>
@@ -16,7 +16,6 @@ export default {
   data() {
     return {
       isMenuActive: false,
-      cos: 'Kalendarz v'
     };
   },
   methods: {
@@ -30,6 +29,11 @@ export default {
 
 <style scoped>
 .urlop {
+  text-decoration: none;
+  text-underline: none;
+  color: white;
+}
+.wolnezkalendarza {
   text-decoration: none;
   text-underline: none;
   color: white;

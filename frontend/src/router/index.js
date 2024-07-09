@@ -6,6 +6,7 @@ import LogIn from "@/views/LoginView.vue";
 import PrivateView from "@/views/PrivateView.vue";
 import PublicView from "@/views/PublicView.vue";
 import urlop from "@/components/menu-content/choose/calendar-content/urlopApp.vue"
+import wolnezkalendarza from "@/components/menu-content/choose/calendar-content/wolnezkalendarza.vue";
 const routes = [
     {
         path: '/',
@@ -26,6 +27,11 @@ const routes = [
                 path: 'urlop',
                 name: 'urlop',
                 component: urlop
+            },
+            {
+                path: 'wolnezkalendarza',
+                name: 'wolnezkalendarza',
+                component: wolnezkalendarza
             },
         ]
     },
