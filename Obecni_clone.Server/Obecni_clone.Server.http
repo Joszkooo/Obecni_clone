@@ -1,0 +1,6 @@
+@Obecni_clone.Server_HostAddress = http://localhost:5266
+
+GET {{Obecni_clone.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

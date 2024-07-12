@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\best_back.Server.props" />
-</Project>

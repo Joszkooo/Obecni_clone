@@ -1,0 +1,23 @@
+{
+  "Version": 1,
+  "Hash": "At/GYqQa15a3qnlY8aLO2aC5x/H3VdkymsjL0jEruF0=",
+  "Source": "Obecni_clone.Server",
+  "BasePath": "_content/Obecni_clone.Server",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [
+    {
+      "Identity": "C:\\Users\\joszko\\Desktop\\Obecni_clone\\obecni_clone.client\\obecni_clone.client.esproj",
+      "Version": 2,
+      "Source": "obecni_clone.client",
+      "GetPublishAssetsTargets": "GetCurrentProjectPublishStaticWebAssetItems",
+      "AdditionalPublishProperties": "",
+      "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained",
+      "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
+      "AdditionalBuildProperties": "",
+      "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained"
+    }
+  ],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
