@@ -1,13 +1,13 @@
 {
   "Version": 1,
-  "Hash": "At/GYqQa15a3qnlY8aLO2aC5x/H3VdkymsjL0jEruF0=",
+  "Hash": "XMSeg1dbIf9OH/yf6OCFD5rnqhGnzwrDJygoJHry5I8=",
   "Source": "Obecni_clone.Server",
   "BasePath": "_content/Obecni_clone.Server",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [
     {
-      "Identity": "C:\\Users\\joszko\\Desktop\\Obecni_clone\\obecni_clone.client\\obecni_clone.client.esproj",
+      "Identity": "D:\\CODE\\Obecni_clone\\obecni_clone.client\\obecni_clone.client.esproj",
       "Version": 2,
       "Source": "obecni_clone.client",
       "GetPublishAssetsTargets": "GetCurrentProjectPublishStaticWebAssetItems",

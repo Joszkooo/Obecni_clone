@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "rlJi3VkQqPLd0m+J7ZCBeMWZSCgDwGuRToNmko3UAe2YARg7uvVGILmtgdTU6q/+hQgths+NLQdYxc/Xac7IYw==",
+  "dgSpecHash": "xT5ztO54JKBuya1acWSxMQytaECA4UPoJNS8SVd3wkg3I6Lx/qMYxMnfxUI1tBrYC+jBxucBYlF9oIPnWsR1xA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\joszko\\Desktop\\Obecni_clone\\Obecni_clone.Server\\Obecni_clone.Server.csproj",
+  "projectFilePath": "D:\\CODE\\Obecni_clone\\Obecni_clone.Server\\Obecni_clone.Server.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\joszko\\.nuget\\packages\\automapper\\13.0.1\\automapper.13.0.1.nupkg.sha512",
     "C:\\Users\\joszko\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",

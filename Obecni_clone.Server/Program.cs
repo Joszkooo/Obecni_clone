@@ -5,6 +5,10 @@ global using AutoMapper;
 global using Microsoft.EntityFrameworkCore;
 global using Obecni_clone.Server.Data;
 global using System.Text.Json.Serialization;
+global using Obecni_clone.Server.Services.KlientService;
+global using Obecni_clone.Server.Services.DniWolneService;
+global using Obecni_clone.Server.Services.UrlopService;
+
 using Newtonsoft.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,8 +21,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(Program).Assembly); 
-builder.Services.AddScoped<IPracownikService, PracownikService>();  // to jest wazne do dzialania lol
-
+builder.Services.AddScoped<IPracownikService, PracownikService>();
+builder.Services.AddScoped<IKlientService, KlientService>();
+builder.Services.AddScoped<IDniWolneService, DniWolneService>();
+builder.Services.AddScoped<IUrlopService, UrlopService>();
 
 // JSON serializer
 builder.Services.AddControllers().AddNewtonsoftJson(options=>

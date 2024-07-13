@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\joszko\\Desktop\\Obecni_clone\\Obecni_clone.Server\\Obecni_clone.Server.csproj": {}
+    "D:\\CODE\\Obecni_clone\\Obecni_clone.Server\\Obecni_clone.Server.csproj": {}
   },
   "projects": {
-    "C:\\Users\\joszko\\Desktop\\Obecni_clone\\Obecni_clone.Server\\Obecni_clone.Server.csproj": {
+    "D:\\CODE\\Obecni_clone\\Obecni_clone.Server\\Obecni_clone.Server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\joszko\\Desktop\\Obecni_clone\\Obecni_clone.Server\\Obecni_clone.Server.csproj",
+        "projectUniqueName": "D:\\CODE\\Obecni_clone\\Obecni_clone.Server\\Obecni_clone.Server.csproj",
         "projectName": "Obecni_clone.Server",
-        "projectPath": "C:\\Users\\joszko\\Desktop\\Obecni_clone\\Obecni_clone.Server\\Obecni_clone.Server.csproj",
+        "projectPath": "D:\\CODE\\Obecni_clone\\Obecni_clone.Server\\Obecni_clone.Server.csproj",
         "packagesPath": "C:\\Users\\joszko\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\joszko\\Desktop\\Obecni_clone\\Obecni_clone.Server\\obj\\",
+        "outputPath": "D:\\CODE\\Obecni_clone\\Obecni_clone.Server\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\joszko\\AppData\\Roaming\\NuGet\\NuGet.Config",

@@ -19,8 +19,7 @@ namespace Obecni_clone.Server.Services.PracownikService
         // tutaj tez wszedzie Task<> oraz async
         public async Task<List<Pracownik>> GetAllPracownik()
         {
-            var dbPracownicy = await _context.Pracownicy.ToListAsync();
-            return dbPracownicy;
+            return await _context.Pracownicy.ToListAsync();
         }
 
         public async Task<Pracownik> GetRejestrPracownika(int idPracownika, string dzien)
@@ -32,7 +31,7 @@ namespace Obecni_clone.Server.Services.PracownikService
         {
             var mail = await _context.Pracownicy.FirstOrDefaultAsync(e => e.Email == email);
             
-            if (mail != null)
+            if (mail is not null) // zmienilem z != sprawdz czy git
             {
                 return "Zweryfikowano wlasciwie";
             }
@@ -42,11 +41,5 @@ namespace Obecni_clone.Server.Services.PracownikService
             }
             
         }
-        // [HttpGet]
-        // [Route("ShowClients")]
-        // public JsonResult ShowKlienci()
-        // {
-        // }
-
     }
 }
