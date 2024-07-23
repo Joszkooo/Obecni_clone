@@ -8,6 +8,11 @@ namespace Obecni_clone.Server.Data
 {
     public class DataContext : DbContext
     {
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.EnableSensitiveDataLogging();
+        }
+
         public DataContext(DbContextOptions<DataContext> options) : base(options) {}
         // imo te nazwy sa troche zwalone, jesli ktos ma pomysl smialo zmieniac
         // po prostu zrobilem liczby mnogie ale nw xD

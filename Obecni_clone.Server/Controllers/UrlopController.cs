@@ -22,5 +22,12 @@ namespace Obecni_clone.Server.Controllers
         {
             return new JsonResult(await _urlopService.GetUrlop(PracownikId));
         }
+
+        [HttpGet]
+        [Route("GetUrlopNotification")]
+        public async Task<JsonResult> GetUrlopNotification(int PracownikId)
+        {
+            return new JsonResult(await _urlopService.GetUrlopNotification(PracownikId));
+        }
     }
 }

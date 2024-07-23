@@ -11,5 +11,7 @@ namespace Obecni_clone.Server.Models
         W_biurze = 1,
         L4 = 2,
         Zdalnie = 3,
+        Urlop = 4,
+        Wyjazd_do_klienta = 5
     }
 }

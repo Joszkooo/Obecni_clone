@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "XMSeg1dbIf9OH/yf6OCFD5rnqhGnzwrDJygoJHry5I8=",
+  "Hash": "OuELqhFXxoyyTMBWUcufe6ujQx4YlcHXlwp9j8kSxHk=",
   "Source": "Obecni_clone.Server",
   "BasePath": "_content/Obecni_clone.Server",
   "Mode": "Default",
@@ -12,12 +12,40 @@
       "Source": "obecni_clone.client",
       "GetPublishAssetsTargets": "GetCurrentProjectPublishStaticWebAssetItems",
       "AdditionalPublishProperties": "",
-      "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained",
+      "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;Configuration;Platform;TargetFramework;RuntimeIdentifier;SelfContained",
       "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
       "AdditionalBuildProperties": "",
-      "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained"
+      "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;Configuration;Platform;TargetFramework;RuntimeIdentifier;SelfContained"
     }
   ],
-  "DiscoveryPatterns": [],
-  "Assets": []
+  "DiscoveryPatterns": [
+    {
+      "Name": "Obecni_clone.Server\\wwwroot",
+      "Source": "Obecni_clone.Server",
+      "ContentRoot": "D:\\CODE\\Obecni_clone\\Obecni_clone.Server\\wwwroot\\",
+      "BasePath": "_content/Obecni_clone.Server",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "D:\\CODE\\Obecni_clone\\Obecni_clone.Server\\wwwroot\\swagger-ui\\SwaggerDark.css",
+      "SourceId": "Obecni_clone.Server",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\CODE\\Obecni_clone\\Obecni_clone.Server\\wwwroot\\",
+      "BasePath": "_content/Obecni_clone.Server",
+      "RelativePath": "swagger-ui/SwaggerDark.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\swagger-ui\\SwaggerDark.css"
+    }
+  ]
 }

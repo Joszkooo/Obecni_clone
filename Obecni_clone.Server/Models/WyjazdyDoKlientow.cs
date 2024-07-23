@@ -8,15 +8,17 @@ namespace Obecni_clone.Server.Models
 {
     public class WyjazdyDoKlientow
     {
+        [Required]
         public int Id { get; set; }
+        [Required]
         public int PracownikId { get; set; }
+        [Required]
         public int KlienciId { get; set; }
+        [Required]
         public DateTime DataWyjazdu { get; set; }
         public TimeSpan? GodzinaOd { get; set; }
         public TimeSpan? GodzinaDo { get; set; }
-        [Required]
         public Pracownik pracownik { get; set; }
-        [Required]
         public Klient klienci { get; set; }
     }
 }

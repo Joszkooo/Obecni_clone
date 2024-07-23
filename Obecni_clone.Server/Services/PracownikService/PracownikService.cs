@@ -22,23 +22,26 @@ namespace Obecni_clone.Server.Services.PracownikService
             return await _context.Pracownicy.ToListAsync();
         }
 
-        public async Task<Pracownik> GetRejestrPracownika(int idPracownika, string dzien)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<string> Verify(string email)
         {
-            var mail = await _context.Pracownicy.FirstOrDefaultAsync(e => e.Email == email);
+            try
+            {
+                var mail = await _context.Pracownicy.FirstOrDefaultAsync(e => e.Email == email);
+                
+                if (mail is not null)
+                {
+                    return "Zweryfikowano wlasciwie";
+                }
+                else
+                {
+                    return "Brak weryfikacji";
+                }
+            }
+            catch (Exception ex)
+            {
+                return $"Error: {ex.Message}";
+            }
             
-            if (mail is not null) // zmienilem z != sprawdz czy git
-            {
-                return "Zweryfikowano wlasciwie";
-            }
-            else
-            {
-                return "Brak weryfikacji";
-            }
             
         }
     }

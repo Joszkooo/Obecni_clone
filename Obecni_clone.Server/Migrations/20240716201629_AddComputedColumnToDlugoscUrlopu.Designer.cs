@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Obecni_clone.Server.Data;
 
@@ -11,9 +12,11 @@ using Obecni_clone.Server.Data;
 namespace Obecni_clone.Server.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240716201629_AddComputedColumnToDlugoscUrlopu")]
+    partial class AddComputedColumnToDlugoscUrlopu
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -63,8 +66,7 @@ namespace Obecni_clone.Server.Migrations
 
                     b.Property<string>("Kod_pocztowy")
                         .IsRequired()
-                        .HasMaxLength(7)
-                        .HasColumnType("nvarchar(7)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Miasto")
                         .IsRequired()
@@ -76,8 +78,7 @@ namespace Obecni_clone.Server.Migrations
 
                     b.Property<string>("Telefon")
                         .IsRequired()
-                        .HasMaxLength(12)
-                        .HasColumnType("nvarchar(12)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -128,7 +129,7 @@ namespace Obecni_clone.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool?>("Moderator")
+                    b.Property<bool>("Moderator")
                         .HasColumnType("bit");
 
                     b.Property<string>("Nazwisko")

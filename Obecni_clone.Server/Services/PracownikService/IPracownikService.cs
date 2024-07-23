@@ -9,7 +9,6 @@ namespace Obecni_clone.Server.Services.PracownikService
     {
         // Do wszystkich typów musisz dodać Task<> i tyle
         Task<List<Pracownik>> GetAllPracownik();
-        Task<Pracownik> GetRejestrPracownika(int idPracownika, string dzien);
         Task<string> Verify(string email);
     }
 }

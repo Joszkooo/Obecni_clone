@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Obecni_clone.Server")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6db56781c92b438cde965fbc618a31587d87d4b4")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3987dc71726f3d5a5f9725e967160cca86137362")]
 [assembly: System.Reflection.AssemblyProductAttribute("Obecni_clone.Server")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Obecni_clone.Server")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

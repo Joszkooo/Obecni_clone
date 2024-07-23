@@ -289,3 +289,4 @@ D:\CODE\Obecni_clone\Obecni_clone.Server\obj\Debug\net8.0\refint\Obecni_clone.Se
 D:\CODE\Obecni_clone\Obecni_clone.Server\obj\Debug\net8.0\Obecni_clone.Server.pdb
 D:\CODE\Obecni_clone\Obecni_clone.Server\obj\Debug\net8.0\Obecni_clone.Server.genruntimeconfig.cache
 D:\CODE\Obecni_clone\Obecni_clone.Server\obj\Debug\net8.0\ref\Obecni_clone.Server.dll
+D:\CODE\Obecni_clone\Obecni_clone.Server\bin\Debug\net8.0\Obecni_clone.Server.staticwebassets.runtime.json

@@ -27,14 +27,6 @@ namespace Obecni_clone.Server.Controllers
             return new JsonResult(await _pracownikService.GetAllPracownik());
         }
 
-        // TO DO ---------------------------------------------------------------------------------
-        [HttpGet]
-        [Route("GetRejestrPracownika")]
-        public Task<JsonResult> GetRejestrPracownika(int idPracownika, string dzien)
-        {
-            return null;
-        }
-
         [HttpGet]
         [Route("Verify")]
         public async Task<JsonResult> Verify(string email)

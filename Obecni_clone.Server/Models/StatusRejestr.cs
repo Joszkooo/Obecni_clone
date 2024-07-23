@@ -10,6 +10,6 @@ namespace Obecni_clone.Server.Models
     {
         Wejscie = 1,
         Wyjscie = 2,
-        Przerwa = 3 
+        Przerwa = 3
     }
 }
