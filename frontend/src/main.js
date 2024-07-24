@@ -24,6 +24,20 @@ const setUserSession = (userData) => {
     sessionStorage.setItem('user', JSON.stringify(userData));
 };
 
+export function saveAuthToken(token) {
+    localStorage.setItem('authToken', token);
+}
+
+// Pobiera token z localStorage
+export function getAuthToken() {
+    return localStorage.getItem('authToken');
+}
+
+// Usuwa token z localStorage
+export function clearAuthToken() {
+    localStorage.removeItem('authToken');
+}
+
 // Funkcja do pobierania użytkownika z sesji
 const getUserSession = () => {
     const userData = sessionStorage.getItem('user');

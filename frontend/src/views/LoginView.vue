@@ -22,7 +22,7 @@
 
   <!--    <input type="checkbox" value="lsRememberMe" id="rememberMe"> <label class="" for="rememberMe">asdds</label>-->
       <router-link to="/base"><button id="buttonCos">Zaloguj się</button></router-link>
-      <GoogleLogin :callback="callback"  class="google-login"/>
+      <GoogleLogin :callback="callback" @click="handleAuthClick"  class="google-login"/>
     </form>
     </div>
   </div>
@@ -41,6 +41,11 @@ export default {
       password: '',
       loggedIn: false,
       user: null,
+      gapiLoaded: false,
+      clientId: '261479002576-vvtpb4ctt25gtd6rtlhgfsi72nuj4ipv.apps.googleusercontent.com', // Podaj swój Client ID
+      apiKey: 'AIzaSyC7S4P4TH1BdF2blBb9Jz3IaQl8cvTd-p8', // Podaj swój API Key
+      discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"],
+      scopes: 'https://www.googleapis.com/auth/calendar',
     };
   },
   methods: {
@@ -56,6 +61,39 @@ export default {
       googleLogout();
       this.loggedIn = false;
     },
+    loadGapi() {
+      gapi.load('client:auth2', this.initClient);
+    },
+    initClient() {
+      gapi.client.init({
+        apiKey: this.apiKey,
+        clientId: this.clientId,
+        discoveryDocs: this.discoveryDocs,
+        scope: this.scopes,
+      }).then(() => {
+        this.gapiLoaded = true;
+        console.log('GAPI client initialized.');
+      }).catch(error => {
+        console.error('Error during gapi client init: ', error);
+      });
+    },
+    handleAuthClick() {
+      if (this.gapiLoaded) {
+        gapi.auth2.getAuthInstance().signIn().then(() => {
+          console.log('User signed in.');
+          // Przykładowe wywołanie funkcji po zalogowaniu, np. listowanie nadchodzących wydarzeń
+          // this.listUpcomingEvents();
+        }).catch(error => {
+          console.error('Error during sign in: ', error);
+        });
+      } else {
+        console.error('GAPI client not loaded.');
+      }
+    },
+  },
+  mounted() {
+    // Ładuje GAPI po zamontowaniu komponentu
+    this.loadGapi();
   },
 
 };

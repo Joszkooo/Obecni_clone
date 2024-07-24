@@ -2,10 +2,10 @@
 
 let user = null;
 
-export const setUser = (newUser) => {
+export function setUser(newUser) {
     user = newUser;
-};
+}
 
-export const getUser = () => {
+export function getUser() {
     return user;
-};
+}
