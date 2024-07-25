@@ -54,7 +54,6 @@ export default {
     }
   },
   methods: {
-  methods:{
     toggle(id) {
       const index = this.opened.indexOf(id);
       if (index > -1) {
