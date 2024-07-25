@@ -7,6 +7,10 @@ export default {
   components: {GoogleLogin},
   data(){
     return{
+      opened: [],
+      rows: [
+        { id: 1, name: 'Bill', handle: 'bill' },
+      ],
       currentDate: moment(),
       urlop: {
         start: "",
@@ -26,6 +30,7 @@ export default {
       duration: 0,
       selectedUserId: null,
       freeDay: '',
+      expandedRows: [],
       callback:(response)=> {
         console.log("zalogowano")
         this.loggedIn = true
@@ -36,6 +41,14 @@ export default {
     }
   },
   methods:{
+    toggle(id) {
+      const index = this.opened.indexOf(id);
+      if (index > -1) {
+        this.opened.splice(index, 1);
+      } else {
+        this.opened.push(id);
+      }
+    },
     statusofwork(id) {
       axios.post("https://localhost:7285/api/ToDoApp/ChangeStatus2?id="+id)
           .then((response) => {
@@ -222,7 +235,9 @@ export default {
       <span class="currentdate">{{ currentDate.format('YYYY-MM-DD') }}</span>
       <button class="nextday" @click="nextDay"><img src="@/assets/ikony/right-arrow.png" style="width: 1vw"></button>
     </div>
+
     <table class="tabelacroll">
+
       <thead class="rounded-header">
       <tr>
         <th><img src="@/assets/ikony/user.png" style="width: 1.3vw; margin-right: 4%">Pracownik</th>
@@ -236,26 +251,47 @@ export default {
       </thead>
       <tbody style="border-radius: 5px">
       <tr v-for="(note,  index) in notes" :key="note.id" :class="{ 'odd-row': index % 2 === 0, 'even-row': index % 2 === 1 }">
+        <!-- ...existing table cells... -->
         <td>
-          <div class="blur" v-if="statusPokazany" style="position: fixed; right: 1px;bottom: 1px"></div>
-          <div class="allstatus" v-if="statusPokazany">
-            <label>
-              <div v-for="status in allstatus" :key="status.Id">
-                {{ status.Wejscie }}
-                {{ status.Wyjscie }}
-                {{ status.Status }}
-                {{ status.Status2 }}
-              </div>
-            </label>
-            <button class="closebutton" @click="pokazallstatus(this.selectedUserId)"></button>
-          </div>
-          <a @click="pokazallstatus(note.Id); getallrejestr(note.Id,currentDate.format('YYYY-MM-DD'))">{{ note.Imie }} {{ note.Nazwisko }}</a>
+            <template v-for="row in rows" :key="row.id">
+
+              <a @click="toggle(note.Id) ; getallrejestr(note.Id,currentDate.format('YYYY-MM-DD'))">{{ note.Imie }} {{ note.Nazwisko }} </a>
+              <tr @click="toggle(note.Id)" :class="{ opened: opened.includes(note.Id) }">
+
+              </tr>
+              <tr v-if="opened.includes(note.Id)">
+                <td colspan="7">
+                  <div v-for="status in allstatus" :key="status.Id">
+                  </div>
+                </td>
+              </tr>
+            </template>
         </td>
-        <td>{{ note.status }}</td>
+        <td>{{ note.status }}
+          <template v-for="row in rows" :key="row.id">
+
+
+            <tr @click="toggle(note.Id)" :class="{ opened: opened.includes(note.Id) }">
+
+            </tr>
+            <tr v-if="opened.includes(note.Id)">
+              <td colspan="7">
+                <div v-for="status in allstatus" :key="status.Id">
+                  {{ status.Wejscie }} ->
+                  {{ status.Status }}<br>
+                  {{ status.Wyjscie }} ->
+                  {{ status.Status2 }}
+                </div>
+              </td>
+            </tr>
+          </template>
+        </td>
+
         <td>{{ note.worktime }}</td>
         <td>{{ note.wejscie }}</td>
         <td>{{ note.wyjscie }}</td>
         <td>
+
           <a @click="statusofwork(note.Id)">
             <img v-if="note.status2 === 'zdalnie'" style="width: 2vw" src="@/assets/ikony/zdalnie.png">
             <img v-if="note.status2 === 'wyjscie'" style="width: 2vw" src="@/assets/ikony/wyjscie.png">
@@ -293,6 +329,9 @@ export default {
 </template>
 
 <style scoped>
+.opened {
+  background-color: #6B72FF;
+}
 .currentdate {
   background-color: #101936;
   padding: 5px 3%;
