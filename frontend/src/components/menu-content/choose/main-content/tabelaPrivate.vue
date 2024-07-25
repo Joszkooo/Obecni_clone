@@ -325,22 +325,8 @@ export default {
 
             </tr>
             <tr v-if="opened.includes(note.Id)">
-              <td colspan="7">
-                <div v-for="status in allstatus" :key="status.Id">
-                </div>
-              </td>
-            </tr>
-          </template>
-        </td>
-        <td>{{ note.status }}
-          <template v-for="row in rows" :key="row.id">
-
-
-            <tr @click="toggle(note.Id)" :class="{ opened: opened.includes(note.Id) }">
-
-            </tr>
-            <tr v-if="opened.includes(note.Id)">
-              <td colspan="7">
+              <td colspan="7" class="opened">
+                Status:
                 <div v-for="status in allstatus" :key="status.Id">
                   {{ status.Wejscie }} ->
                   {{ status.Status }}<br>
@@ -351,10 +337,50 @@ export default {
             </tr>
           </template>
         </td>
-
-        <td>{{ note.worktime }}</td>
-        <td>{{ note.wejscie }}</td>
-        <td>{{ note.wyjscie }}</td>
+        <td>{{ note.status }}
+          <template v-for="row in rows" :key="row.id">
+            <tr @click="toggle(note.Id)" :class="{ opened: opened.includes(note.Id) }">
+            </tr>
+            <tr v-if="opened.includes(note.Id)">
+              <td colspan="7">
+                <div v-for="status in allstatus" :key="status.Id">
+                  <br>
+                  <br>
+                </div>
+              </td>
+            </tr>
+          </template>
+        </td>
+        <td>{{ note.worktime }}
+          <tr v-if="opened.includes(note.Id)">
+            <td colspan="7">
+              <div v-for="status in allstatus" :key="status.Id">
+                <br>
+                <br>
+              </div>
+            </td>
+          </tr>
+        </td>
+        <td>{{ note.wejscie }}
+          <tr v-if="opened.includes(note.Id)">
+            <td colspan="7">
+              <div v-for="status in allstatus" :key="status.Id">
+                <br>
+                <br>
+              </div>
+            </td>
+          </tr>
+        </td>
+        <td>{{ note.wyjscie }}
+          <tr v-if="opened.includes(note.Id)">
+            <td colspan="7">
+              <div v-for="status in allstatus" :key="status.Id">
+                <br>
+                <br>
+              </div>
+            </td>
+          </tr>
+        </td>
         <td>
           <a @click="statusofwork(note.Id)">
             <img v-if="note.status2 === 'zdalnie'" style="width: 2vw" src="@/assets/ikony/zdalnie.png">
@@ -367,6 +393,12 @@ export default {
           <a @click="confirmstatus(note.Id)">
             <img style="width: 2vw; margin-left: 4%" src="@/assets/ikony/check.png">
           </a>
+          <tr v-if="opened.includes(note.Id)">
+              <div v-for="status in allstatus" :key="status.Id">
+                <br>
+                <br>
+              </div>
+          </tr>
         </td>
         <td>
           <div class="blur" v-if="formularzPokazany" style="position: fixed; right: 1px;bottom: 1px"></div>
@@ -384,6 +416,12 @@ export default {
           <a @click="pokazFormularz(note.Id);getUrlopnoti(note.Id)">
             <img src="@/assets/ikony/calendar.png" style="width: 3vw">
           </a>
+          <tr v-if="opened.includes(note.Id)">
+              <div v-for="status in allstatus" :key="status.Id">
+                <br>
+                <br>
+              </div>
+          </tr>
         </td>
       </tr>
       </tbody>
@@ -394,7 +432,8 @@ export default {
 
 <style scoped>
 .opened {
-  background-color: #6B72FF;
+  background-color: #212B4E;
+  //margin-left: ;
 }
 .currentdate {
   background-color: #101936;
