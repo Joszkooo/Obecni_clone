@@ -54,6 +54,7 @@ export default {
     }
   },
   methods: {
+  // methods:{
     toggle(id) {
       const index = this.opened.indexOf(id);
       if (index > -1) {
@@ -317,19 +318,19 @@ export default {
       <tr v-for="(note,  index) in notes" :key="note.id" :class="{ 'odd-row': index % 2 === 0, 'even-row': index % 2 === 1 }">
         <!-- ...existing table cells... -->
         <td>
-            <template v-for="row in rows" :key="row.id">
+          <template v-for="row in rows" :key="row.id">
 
-              <a @click="toggle(note.Id) ; getallrejestr(note.Id,currentDate.format('YYYY-MM-DD'))">{{ note.Imie }} {{ note.Nazwisko }} </a>
-              <tr @click="toggle(note.Id)" :class="{ opened: opened.includes(note.Id) }">
+            <a @click="toggle(note.Id) ; getallrejestr(note.Id,currentDate.format('YYYY-MM-DD'))">{{ note.Imie }} {{ note.Nazwisko }} </a>
+            <tr @click="toggle(note.Id)" :class="{ opened: opened.includes(note.Id) }">
 
-              </tr>
-              <tr v-if="opened.includes(note.Id)">
-                <td colspan="7">
-                  <div v-for="status in allstatus" :key="status.Id">
-                  </div>
-                </td>
-              </tr>
-            </template>
+            </tr>
+            <tr v-if="opened.includes(note.Id)">
+              <td colspan="7">
+                <div v-for="status in allstatus" :key="status.Id">
+                </div>
+              </td>
+            </tr>
+          </template>
         </td>
         <td>{{ note.status }}
           <template v-for="row in rows" :key="row.id">
@@ -350,7 +351,7 @@ export default {
             </tr>
           </template>
         </td>
-        <td>{{ note.status }}</td>
+
         <td>{{ note.worktime }}</td>
         <td>{{ note.wejscie }}</td>
         <td>{{ note.wyjscie }}</td>
