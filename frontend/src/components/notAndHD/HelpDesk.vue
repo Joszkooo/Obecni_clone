@@ -14,7 +14,8 @@ export default {
     gethd(date) {
       axios.get("https://localhost:7285/api/ToDoApp/GetHD?data="+date)
           .then(response => {
-            this.hd_info = response.data.map(item => item.imie+' '+item.nazwisko).join('\n');
+            this.hd_info = Array.isArray(response.data) ?
+                response.data.map(item => item.imie + ' ' + item.nazwisko).join('\n'):'';
 
           })
     }

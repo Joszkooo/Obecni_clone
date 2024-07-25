@@ -1,6 +1,6 @@
 <script>
 import axios from "axios";
-import {gapi} from "gapi-script";
+import { gapi } from "gapi-script";
 
 export default {
   data() {
@@ -8,9 +8,9 @@ export default {
       free_info: '',
       events: [],
       calendars: [],
-      selectedCalendarId: '59a6ad313c7f550c6797e8a37a562d234918fbf16ba1f3a12b0d1b8935585c0a@group.calendar.google.com', // Default to the primary calendar
-      CLIENT_ID: '261479002576-f0i7fvh46sf28l0v4h5v0emfsfqjn78n.apps.googleusercontent.com',  // Replace with your actual client ID
-      API_KEY: 'AIzaSyBwH1RWW670JDB8PYLQlbVogTNJ7XK_KUA',  // Replace with your actual API key
+      selectedCalendarId: '59a6ad313c7f550c6797e8a37a562d234918fbf16ba1f3a12b0d1b8935585c0a@group.calendar.google.com',
+      CLIENT_ID: '261479002576-f0i7fvh46sf28l0v4h5v0emfsfqjn78n.apps.googleusercontent.com',
+      API_KEY: 'AIzaSyC7S4P4TH1BdF2blBb9Jz3IaQl8cvTd-p8',
       DISCOVERY_DOCS: ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"],
       SCOPES: "https://www.googleapis.com/auth/calendar.readonly"
     }
@@ -28,23 +28,14 @@ export default {
     },
     initClient() {
       gapi.client.init({
-        apiKey: this.API_KEY,
-        clientId: this.CLIENT_ID,
+        clientId: 'YOUR_CLIENT_ID',
         discoveryDocs: this.DISCOVERY_DOCS,
         scope: this.SCOPES,
       }).then(() => {
         console.log('GAPI client initialized.');
-        this.listCalendars();
+        this.listUpcomingEvents();
       }).catch((error) => {
         console.error('Error initializing GAPI client:', error);
-      });
-    },
-    listCalendars() {
-      gapi.client.calendar.calendarList.list().then((response) => {
-        this.calendars = response.result.items;
-        console.log('Calendars:', this.calendars);
-      }).catch((error) => {
-        console.error('Error listing calendars:', error);
       });
     },
     listUpcomingEvents() {
