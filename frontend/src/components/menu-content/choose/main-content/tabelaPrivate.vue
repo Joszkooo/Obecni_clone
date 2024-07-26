@@ -54,7 +54,6 @@ export default {
     }
   },
   methods: {
-    // methods:{
     toggle(id) {
       const index = this.opened.indexOf(id);
       if (index > -1) {
@@ -394,10 +393,10 @@ export default {
             <img style="width: 2vw; margin-left: 4%" src="@/assets/ikony/check.png">
           </a>
           <tr v-if="opened.includes(note.Id)">
-            <div v-for="status in allstatus" :key="status.Id">
-              <br>
-              <br>
-            </div>
+              <div v-for="status in allstatus" :key="status.Id">
+                <br>
+                <br>
+              </div>
           </tr>
         </td>
         <td>
@@ -421,6 +420,7 @@ export default {
               <br>
               <br>
             </div>
+
           </tr>
         </td>
       </tr>
@@ -431,10 +431,7 @@ export default {
 </template>
 
 <style scoped>
-.opened {
 
-  //margin-left: ;
-}
 .currentdate {
   background-color: #101936;
   padding: 5px 3%;
