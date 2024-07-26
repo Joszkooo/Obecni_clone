@@ -2,6 +2,7 @@
   <div id="tabela">
     <table>
       <thead class="rounded-header">
+      <td style="background-color: #212B4E">{{ currentDate.format("L") }}</td>
       <tr>
         <th>Pseudonim</th>
         <th>Czas Pracy</th>
@@ -59,49 +60,6 @@ export default {
     }
   },
   methods: {
-    statusofwork(id) {
-      axios.post("https://localhost:7285/api/ToDoApp/ChangeStatus2?id=" + id)
-          .then((response) => {
-            console.log(response.data)
-            this.showTable()
-          })
-
-    },
-    confirmstatus(id) {
-      axios.post("https://localhost:7285/api/ToDoApp/ConfirmStatus?id=" + id)
-          .then((response) => {
-            alert(response.data)
-            this.showTable()
-          })
-
-    },
-    calculateDuration() {
-      if (this.selectedDateStart && this.selectedDateEnd && this.selectedDateStart < this.selectedDateEnd) {
-        const startDate = new Date(this.selectedDateStart);
-        const endDate = new Date(this.selectedDateEnd);
-        const diffTime = Math.abs(endDate - startDate);
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        this.duration = diffDays;
-      } else {
-        this.duration = 0;
-      }
-    },
-    pokazFormularz(id) {
-      this.selectedUserId = id;
-      this.formularzPokazany = !this.formularzPokazany;
-      if (!this.formularzPokazany) {
-        this.selectedDateStart = '';
-        this.selectedDateEnd = '';
-        this.duration = '';
-        this.urlop.end = '';
-        this.urlop.start = '';
-      }
-      console.log(this.selectedUserId)
-    },
-    pokazallstatus(id) {
-      this.selectedUserId = id;
-      this.statusPokazany = !this.statusPokazany
-    },
     async showTable() {
       axios.get("https://localhost:7285/api/ToDoApp/GetPracownik")
           .then(response => {
@@ -112,21 +70,8 @@ export default {
             console.error('Wystąpił błąd podczas pobierania notatek:', error);
           });
     },
-    getUrlop(id) {
-      axios.get("https://localhost:7285/api/ToDoApp/GetUrlop?UserId=" + id)
-          .then(response => {
-            console.log(response.data)
-            this.urlop.start = moment(response.data[0].od_kiedy).format('YYYY-MM-DD');
-            this.urlop.end = moment(response.data[0].do_kiedy).format('YYYY-MM-DD');
 
-          })
-    },
-    getUrlopnoti(id) {
-      axios.get('https://localhost:7285/api/ToDoApp/GetUrlopNotification?UserId=' + id)
-          .then(response => {
-            this.urlop.info = response.data
-          })
-    },
+
     showlaststatus(id) {
       const day_date = this.currentDate.format('YYYY-MM-DD');
       axios.get(`https://localhost:7285/api/ToDoApp/ShowStatus?id=` + id + `&dzien=` + day_date)
@@ -149,20 +94,24 @@ export default {
 
               // Oblicz i zaktualizuj czas pracy
               const updateWorkTime = () => {
-                const now = moment();
-                const start = entryTime;
-                const end = exitTime || now;
+                if (status2 === 'urlop') {
+                  note.worktime = '08:00:00';
+                } else {
+                  const now = moment();
+                  const start = entryTime;
+                  const end = exitTime || now;
 
-                // Jeśli czas wyjścia jest wcześniejszy niż czas wejścia, dodaj jeden dzień do czasu wyjścia
-                if (exitTime && exitTime.isBefore(entryTime)) {
-                  end.add(1, 'day');
+                  // Jeśli czas wyjścia jest wcześniejszy niż czas wejścia, dodaj jeden dzień do czasu wyjścia
+                  if (exitTime && exitTime.isBefore(entryTime)) {
+                    end.add(1, 'day');
+                  }
+
+                  const duration = moment.duration(end.diff(start));
+                  const hours = Math.max(duration.hours(), 0).toString().padStart(2, '0');
+                  const minutes = Math.max(duration.minutes(), 0).toString().padStart(2, '0');
+                  const seconds = Math.max(duration.seconds(), 0).toString().padStart(2, '0');
+                  note.worktime = `${hours}:${minutes}:${seconds}`;
                 }
-
-                const duration = moment.duration(end.diff(start));
-                const hours = Math.max(duration.hours(), 0).toString().padStart(2, '0');
-                const minutes = Math.max(duration.minutes(), 0).toString().padStart(2, '0');
-                const seconds = Math.max(duration.seconds(), 0).toString().padStart(2, '0');
-                note.worktime = `${hours}:${minutes}:${seconds}`;
               };
 
               // Uruchom setInterval, aby co sekundę aktualizować czas pracy
@@ -176,57 +125,8 @@ export default {
     },
 
 
-    changeStatus(id) {
-      axios.post("https://localhost:7285/api/ToDoApp/ChangeStatus?id=" + id).then(
-          (response) => {
-            alert(response.data);
-            this.showTable();
-          }
-      )
-    },
-
-    addUrlop(od_kiedy, do_kiedy) {
-      axios.post("https://localhost:7285/api/ToDoApp/AddUrlop?id=" + this.selectedUserId + "&od_kiedy=" + od_kiedy + "&do_kiedy=" + do_kiedy).then(
-          (response) => {
-            alert(response.data);
-            console.log(this.selectedUserId);
-
-          }
-      )
-    },
-    Checkurlop() {
-      axios.post("https://localhost:7285/api/ToDoApp/CheckUrlop").then(
-          (response) => {
-            alert(response.data);
-          }
-      )
-    },
-    logout() {
-      googleLogout()
-      this.loggedIn = false
-    },
-
-    getallrejestr(id, day_date) {
-      axios.get('https://localhost:7285/api/ToDoApp/GetRejestrPracownika?idPracownika=' + id + '&dzien=' + day_date).then(
-          (response) => {
-            console.log(response.data);
-            this.allstatus = response.data;
-          }
-      )
-    },
-    prevDay() {
-      this.currentDate = this.currentDate.subtract(1, 'days');
-      console.log(this.currentDate)
-    },
-    nextDay() {
-      this.currentDate = this.currentDate.add(1, 'days');
-      console.log(this.currentDate)
-
-    }
-
   }, mounted: function () {
     this.showTable()
-    this.Checkurlop()
   },
   computed: {
     formattedDate() {
