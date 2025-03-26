@@ -2,36 +2,30 @@
 ### Projekt zespołowy dla ITM sp.z.o.o. od REDSTONE_CODERS
 Aplikacja do zarządzania obecnością w pracy to narzędzie zaprojektowane w celu ułatwienia monitorowania i rejestrowania obecności pracowników. Dzięki niej możliwe jest usprawnienie zarządzania zasobami ludzkimi oraz poprawa efektywności w miejscu pracy.
 
-Tablica projektowa [miro.com](https://miro.com/welcomeonboard/b25YWlhCN21YSmJFTFNNVno5dlppVkxWQjVaWmFyV1FndDFjYmQxbWtabUhDZGtzNVZuU3BpSzFoNm9EaXprYnwzNDU4NzY0NTM5MDc5NzgyMDE4fDI=?share_link_id=916940200239 'miro')
+<!---Tablica projektowa [miro.com](https://miro.com/welcomeonboard/b25YWlhCN21YSmJFTFNNVno5dlppVkxWQjVaWmFyV1FndDFjYmQxbWtabUhDZGtzNVZuU3BpSzFoNm9EaXprYnwzNDU4NzY0NTM5MDc5NzgyMDE4fDI=?share_link_id=916940200239 'miro') -->
 
 ## Wymagania Wstępne
 Przed zainstalowaniem i uruchomieniem aplikacji do zarządzania obecnością w pracy, upewnij się, że na Twoim komputerze są zainstalowane następujące narzędzia i oprogramowanie:
 - [.net8](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 - [Node.js 20.12.x](https://nodejs.org/en/download/prebuilt-installer)
-- [npm 10.8.x](https://docs.npmjs.com/cli/v10/commands/npm-install)
-- [vue3](https://v3.ru.vuejs.org/guide/installation.html)
 
 ## Instalacja
 
 Postępuj zgodnie z poniższymi krokami, aby zainstalować środowisko oraz aplikację.
 
 ```bash
-mkdir Projekt
-cd Projekt
 git clone https://github.com/Joszkooo/Obecni_clone.git
-```
-```
 cd Obecni_clone
 ```
+
 ## Uruchamianie aplikacji
 
 ```sh
 npm install
-```
-```
 npm run dev
 ```
 
+<!--
 ## Dane do unifikacji wyglądu:
 **Używane kolory w projekcie:**  
 - Tło: #191F35  
@@ -63,3 +57,4 @@ npm run dev
 - Kalendarz:  
 	- Nagłówki kalendarza: 12 bold  
 	- Reszta kalendarza: 10 bold  
+-->
